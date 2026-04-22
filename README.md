@@ -26,7 +26,6 @@ Think of it as:
 ## Sample GIF
 ![Termiflow GIF](assets/termiflow.GIF)
 
-
 ## Why TermiFlow?
 
 Modern systems are powerful but fragmented.  
@@ -75,7 +74,7 @@ make help         # Show all available targets
 make clean        # Remove build artifacts
 make info         # Display build information
 ```
-
+---
 #### Manual Build (Without Makefile)
 
 **On Linux:**
