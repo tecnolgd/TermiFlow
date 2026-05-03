@@ -36,22 +36,16 @@ void ApplicationService::run() {
                     shortcutInteractive();
                     break;
                 case '3':
-                    sessionManager();  // N/A
+                    sessionManager();
                     break;
                 case '4':
                     handleThemeChange();
                     break;
-                // case '5':
-                //     configLoader(); // N/A
-                //     break;
                 case '6':
                     historyInteractive();
                     break;
                 case '7':
-                    statsInteractive();  // Partially N/A
-                    break;
-                case '8':
-                    sessionManager();  // N/A
+                    statsInteractive();
                     break;
                 case '9':
                     cmdHandler();
@@ -66,6 +60,34 @@ void ApplicationService::run() {
     } catch (const std::exception& e) {
         uiService.displayError(e.what());
     }
+}
+
+void ApplicationService::launchApp() {
+    ::launchApp();
+}
+
+void ApplicationService::shortcutInteractive() {
+    ::shortcutInteractive();
+}
+
+void ApplicationService::sessionManager() {
+    uiService.displayMessage("Session management coming soon!");
+}
+
+void ApplicationService::historyInteractive() {
+    ::historyInteractive();
+}
+
+void ApplicationService::statsInteractive() {
+    ::statsInteractive();
+}
+
+void ApplicationService::cmdHandler() {
+    ::cmdHandler();
+}
+
+void ApplicationService::changeTheme(const std::string& theme) {
+    ::changeTheme(theme);
 }
 
 void ApplicationService::handleThemeChange() {
