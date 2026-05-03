@@ -141,10 +141,32 @@ After building, run the application:
 - Displays system stats like **CPU usage(N/A)**, **Memory usage** and **Uptime**
 - Currently works for windows systems.
 
-## How it works?
-- TermiFlow is built around a **modular C++** core.    
+## Architecture & Design
+
+### Separation of Concerns
+TermiFlow follows **clean architecture** principles with clear separation between:
+
+#### **Business Logic Layer**
+- **ApplicationService** - Core orchestration and business rules
+- **CommandHandler** - Command parsing and routing
+- Feature modules (Launch, History, Shortcuts, etc.)
+
+#### **UI Service Layer**
+- **UIService** - Centralized user interface and output handling
+- Handles all user prompts, messages, and display formatting
+- Isolated from business logic
+
+#### **Data/Configuration Layer**
+- **ConfigService** - Configuration file I/O and management
+- **Persistence** - History and settings storage
+- File operations decoupled from business logic
+
+### How It Works
+- TermiFlow is built around a **modular C++** core with **clean separation of concerns**.    
 - Each feature (launching, shortcuts, history, etc.) is implemented as a separate module, making it easy to extend and maintain.    
-- The command handler parses user input and dispatches it to the appropriate module. Command history and themes are managed via simple text files.
+- The command handler parses user input and dispatches it to the appropriate module.
+- UI interactions are handled by `UIService`, keeping the business logic pure and testable.
+- Configuration and persistence are managed through `ConfigService`, keeping file I/O isolated.
 
 ## Troubleshooting
 
