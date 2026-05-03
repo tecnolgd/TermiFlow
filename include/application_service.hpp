@@ -13,6 +13,16 @@ private:
     ConfigService configService;
     UIService uiService;
     
+    // Feature handlers (delegate to modules)
+    void launchApp();
+    void shortcutInteractive();
+    void sessionManager();
+    void handleThemeChange();
+    void historyInteractive();
+    void statsInteractive();
+    void cmdHandler();
+    void changeTheme(const std::string& theme);
+    
 public:
     ApplicationService();
     
@@ -21,9 +31,6 @@ public:
     
     // Application control flow
     void run();
-    
-    // Feature handlers
-    void handleThemeChange();
     
     // Utility
     bool shouldApplyAutoTheme();
