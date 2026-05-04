@@ -264,6 +264,100 @@ class history {
 
 #### G. Command Handler (command_handler.hpp/cpp)
 
+**Purpose:** Provide an interactive command-line interface as an alternative to the menu-driven UI
+
+**Responsibilities:**
+- Parse user command input from standard input
+- Tokenize commands into arguments
+- Route commands to appropriate feature modules
+- Support command shortcuts for quick access
+- Maintain command history
+- Provide help and usage information
+
+**Key Function:**
+- `cmdHandler()` - Main interactive command loop
+
+**Supported Commands:**
+
+1. **launch** - Execute applications
+   ```bash
+   launch <app>           // Launch app directly
+   launch <shortcut>      // Launch app via shortcut
+   
+   Examples:
+   launch chrome          // Launch Chrome directly
+   launch c               // Launch Chrome via 'c' shortcut
+   ```
+
+2. **theme** - Change terminal theme
+   ```bash
+   theme <light|dark>     // Apply theme
+   
+   Example:
+   theme dark             // Apply dark theme
+   ```
+
+3. **shortcut** - Manage command shortcuts
+   ```
+   shortcut add <app> <key>      // Add shortcut (e.g., shortcut add chrome c)
+   shortcut remove <key>          // Remove shortcut (e.g., shortcut remove c)
+   shortcut list                  // List all shortcuts
+   ```
+
+4. **history** - Manage command history
+   ```bash
+   history list                   // Display all commands
+   history clear                  // Clear history
+   history goto <index>           // Re-execute command at index
+   
+   Examples:
+   history list                   // Show all commands
+   history goto 0                 // Re-run first command
+   ```
+
+5. **stats** - Display system statistics
+   ```bash
+   stats                          // Show system information
+   ```
+
+**Architecture Pattern:**
+- String tokenization via `std::stringstream`
+- Command dispatch via string matching and if-else chain
+- Integration with all core feature modules (Launch, Theme, Shortcuts, History, Stats)
+
+**Data Flow:**
+```
+User input (e.g., "launch chrome")
+    ↓
+Parse & tokenize via std::stringstream
+    ↓
+Extract command token (e.g., "launch")
+    ↓
+Match against known commands
+    ↓
+Extract arguments (e.g., ["chrome"])
+    ↓
+Call appropriate feature function
+    ├─ Launch module: launchApp(tokens[1])
+    ├─ Theme module: changeTheme(tokens[1])
+    ├─ Shortcuts module: s.add/remove/list()
+    ├─ History module: h.add/list/goto()
+    └─ Stats module: statsInteractive()
+    ↓
+Add command to history
+    ↓
+Return to command prompt
+```
+
+**Error Handling:**
+- Validates argument count for each command
+- Provides usage information on invalid syntax
+- Continues loop on error without crashing
+- Supports exception handling for operations like history index access
+
+**Integration:** Called by `ApplicationService` on menu option '9'
+
+**Note:** The command handler provides a powerful alternative interface for power users and scripting. It complements the menu-driven interface and enables keyboard-driven workflows without navigating menus.
 
 ## Data Flow Diagrams
 
