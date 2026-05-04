@@ -31,15 +31,8 @@ void changeTheme(std::string theme) {
 
 // Interactive mode - UI is delegated to UIService in the new architecture
 // This function is kept for backward compatibility but should use UIService
-void changeTheme() {
-    std::string themeType;
-    std::cout << "Enter theme: (dark / light) :";
-    std::cin >> themeType;
-    changeTheme(themeType);
-}
+
 
 // DEPRECATED: File I/O is now handled by ConfigService
 // This function is removed - use ConfigService::saveConfig() instead
-void saveThemeToConfig(const std::string& theme) {
-    std::cerr << "WARNING: saveThemeToConfig() is deprecated. Use ConfigService for file I/O.\n";
-}
+
