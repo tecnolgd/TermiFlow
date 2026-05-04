@@ -16,53 +16,112 @@
 
 ## Core Design Philosophy
 
-- **Modular architecture** – each feature lives in its own module  
+- **Service-oriented architecture** – clean separation of concerns between business logic, UI, and data layers
+- **Dependency injection** – services are initialized and injected into the application layer
 - **C++ first** – performance, control, and systems-level understanding  
 - **Extensible by design** – new commands can be added without rewriting core logic  
 - **Terminal-native** – works where developers already live
+- **Testability** – business logic decoupled from UI and I/O operations
 
 
 ## Component Architecture
 
+### Architecture Layers
+
+TermiFlow follows a **three-layer service-oriented architecture**:
+
 ### 1. **Entry Point: main.cpp**
 
-**Responsibility:** Application control flow, menu dispatch, user interaction loop
+**Responsibility:** Application bootstrap and error handling
 
-**Key Functions:**
-- `showMenu()` - Display main menu options
-- `main()` - Infinite loop that:
-  - Shows menu to user
-  - Validates numeric input
-  - Dispatches to appropriate feature handler via switch statement
-  - Handles configuration loading and auto-apply theme
+**Key Structure:**
+- Creates `ApplicationService` instance (dependency container)
+- Calls `app.initialize()` to set up configuration and theme
+- Calls `app.run()` to start the main application loop
+- Minimal code, delegates all logic to ApplicationService
 
 **Current Flow:**
 ```
 Application Start
     ↓
-Load Config (termiflow.conf)
+Create ApplicationService
     ↓
-Apply Auto Theme (if enabled)
+Initialize (load config, apply theme)
     ↓
-Display Menu Loop (0-9 options)
+Run main loop (orchestrated by ApplicationService)
     ↓
-Validate Input
-    ↓
-Dispatch to Feature Handler
-    ↓
-Return to Menu
+Exception handling and cleanup
 ```
 
-### 2. **Core Modules**
+### 2. **Core Services (Service Layer)**
 
-#### A. **Config Loader** (config_loader.hpp/cpp)
+#### A. **ApplicationService** (application_service.hpp/cpp)
 
-**Purpose:** Load and parse configuration file
+**Purpose:** Core business logic orchestration and application control flow
+
+**Responsibilities:**
+- Initialize application (load configuration, apply theme)
+- Orchestrate main event loop
+- Delegate feature requests to appropriate modules
+- Handle theme changes and configuration updates
+- Manage application state
+
+**Key Methods:**
+- `initialize()` - Load config and apply auto-theme if enabled
+- `run()` - Main application loop with menu dispatch via switch statement
+- `shouldApplyAutoTheme()` - Check auto-theme setting
+- `getCurrentTheme()` - Get current theme preference
+- `handleThemeChange()` - Coordinate theme change between services
+
+**Dependencies:**
+- `ConfigService` - For configuration management
+- `UIService` - For user interaction
+- Feature modules (Launch, Shortcuts, History, etc.)
+
+**Architecture Pattern:** Dependency injection and facade pattern
+
+#### B. **UIService** (ui_service.hpp/cpp)
+
+**Purpose:** Centralize all user interface and presentation logic
+
+**Responsibilities:**
+- Display menus and prompts to user
+- Collect and validate user input
+- Format and display messages, errors, and success notifications
+- Isolate all I/O operations from business logic
+
+**Key Methods:**
+- `displayMainMenu()` - Show main menu
+- `getMenuChoice()` - Get and validate menu selection (0-9)
+- `getThemeInput()` - Prompt for theme selection
+- `displayMessage(message)` - Display generic message
+- `displayError(error)` - Display error message
+- `displaySuccess(message)` - Display success message
+- `getUserInput(prompt)` - Get generic user input
 
 **Key Features:**
-- Reads `config/termiflow.conf` file
-- Returns `Config` struct containing key-value pairs
-- Used for theme settings and behavior configuration
+- Input validation (ensures numeric choices are digits 0-9)
+- Consistent message formatting
+- Centralized output - all presentation goes through this service
+- Enables easy testing (can be mocked or replaced)
+
+#### C. **ConfigService** (config_service.hpp/cpp)
+
+**Purpose:** Manage all configuration file I/O and data access
+
+**Responsibilities:**
+- Load configuration from `config/termiflow.conf`
+- Parse INI-like config file format
+- Store configuration in memory (unordered_map)
+- Save configuration changes to file
+- Provide get/set interface for config values
+
+**Key Methods:**
+- `loadConfig()` - Read and parse config file
+- `saveConfig()` - Write configuration back to file
+- `getValue(key, defaultValue)` - Retrieve config value
+- `setValue(key, value)` - Update config value
+- `getConfig()` - Get entire configuration object
 
 **Data Structure:**
 ```cpp
@@ -73,34 +132,40 @@ struct Config {
 
 **Config Keys:**
 - `user_interface.theme` - Current theme (light/dark)
+- `user_interface.show_banner` - Show banner on startup
 - `behavior.auto_apply_theme` - Auto-apply theme on startup
 
-#### B. **Theme Manager** (theme_manager.hpp/cpp)
+**File Format:**
+```ini
+[user_interface]
+theme=dark
+show_banner=true
 
-**Purpose:** Manage terminal color themes
-
-**Key Functions:**
-- `changeTheme(std::string theme)` - Apply named theme
-- `changeTheme()` - Interactive theme selection
-- `saveThemeToConfig()` - Persist theme preference to config file
-
-**Supported Themes:** Light, Dark (platform-dependent ANSI codes)
-
-**Implementation:** Uses ANSI escape sequences or platform-specific system calls
-
-#### C. **Command Handler** (command_handler.hpp/cpp)
-
-**Purpose:** Parse and execute custom commands
-
-**Key Functions:**
-- `cmdHandler()` - Interactive command input and execution
-
-**Scope:** Development-phase module (specific use case not finalized)
-
+[behavior]
+auto_apply_theme=true
+```
 
 ### 3. **Feature Modules**
 
-#### A. **Launcher** (launch.hpp/cpp)
+#### A. **Theme Manager** (theme_manager.hpp/cpp)
+
+**Purpose:** Apply and manage terminal color themes
+
+**Key Functions:**
+- `changeTheme(std::string theme)` - Apply named theme to terminal
+- `changeTheme()` - Interactive theme selection (deprecated, use UIService)
+
+**Supported Themes:** Light, Dark (platform-dependent ANSI codes)
+
+**Implementation:** Uses ANSI escape sequences for terminal color control
+
+**Note:** In the new SOC architecture:
+- Theme application logic is isolated in this module
+- Theme persistence is handled by `ConfigService`
+- Theme UI interaction is delegated to `UIService`
+- ApplicationService coordinates between these services
+
+#### B. **Launcher** (launch.hpp/cpp)
 
 **Purpose:** Execute/launch system applications
 
@@ -113,11 +178,26 @@ struct Config {
 - User selects application to launch
 - Executes application via system/platform-specific calls
 
+#### B. **Launcher** (launch.hpp/cpp)
+
+**Purpose:** Execute/launch system applications
+
+**Key Functions:**
+- `launchApp()` - Interactive app selection and launching
+- `launchApp(std::string appName)` - Direct app launch by name
+
+**Functionality:**
+- Presents list of available applications to user
+- User selects application to launch
+- Executes application via system/platform-specific calls
+
 **Platform Support:**
-- Linux: Uses `execvp()` or similar
+- Linux: Uses `execvp()` or similar system call
 - Windows: Uses `CreateProcess()` or `system()` call
 
-#### B. **Shortcuts** (shortcuts.hpp/cpp)
+**Integration:** Called by `ApplicationService` on menu option '1'
+
+#### C. **Shortcuts** (shortcuts.hpp/cpp)
 
 **Purpose:** Define and manage custom command shortcuts
 
@@ -140,28 +220,38 @@ class shortcuts {
 };
 ```
 
+#### C. **Shortcuts** (shortcuts.hpp/cpp)
+
+**Purpose:** Define and manage custom command shortcuts
+
+**Architecture:** Class-based with in-memory state management
+
+```cpp
+class shortcuts {
+    // Storage
+    std::unordered_map<std::string, std::string> shortMap;
+    std::string filepath;
+    
+    // Methods
+    void add(const std::string& key, const std::string& value);
+    void remove(const std::string& key);
+    void save();
+    void list();
+    void load();
+    bool exists(const std::string& value);
+    std::string getValue(const std::string& key);
+};
+```
+
 **Key Features:**
-- In-memory HashMap for quick lookup
+- In-memory HashMap for O(1) lookup
 - File persistence (unknown format)
-- Add/remove/list operations
+- Add/remove/list/search operations
 - Interactive mode (`shortcutInteractive()`)
 
-**Data Flow:**
-```
-shortcutInteractive()
-    ↓
-User Input (add/remove/list)
-    ↓
-shortcuts class instance
-    ↓
-load() from file
-    ↓
-Modify in-memory map
-    ↓
-save() to file
-```
+**Integration:** Called by `ApplicationService` on menu option '2'
 
-#### C. **History** (history.hpp/cpp)
+#### D. **History** (history.hpp/cpp)
 
 **Purpose:** Track and display command history
 
@@ -182,78 +272,120 @@ class history {
 ```
 
 **Key Features:**
-- In-memory vector storage
+- In-memory vector storage (ordered)
 - File persistence
-- Add/list/clear operations
+- Add/list/clear/index operations
 - Interactive mode (`historyInteractive()`)
 
-#### D. **Session Manager** (session_manager.hpp/cpp)
+**Integration:** Called by `ApplicationService` on menu option '6'
+
+#### E. **Session Manager** (session_manager.hpp/cpp)
 
 **Purpose:** Manage sessions and running tasks
 
-**Status:** Not fully implemented (marked N/A in main.cpp)
+**Status:** Planned for future implementation
 
-#### E. **System Stats** (system_stats.hpp/cpp)
+**Integration:** Called by `ApplicationService` on menu option '3'
 
-**Purpose:** Display system information
+#### F. **System Stats** (system_stats.hpp/cpp)
+
+**Purpose:** Display system information and statistics
+
+**Status:** Partially implemented
 
 **Key Functions:**
 - `statsInteractive()` - Display system statistics
 
-**Status:** Partially implemented (marked "Partially N/A" in README)
+**Integration:** Called by `ApplicationService` on menu option '7'
+
+#### G. **Command Handler** (command_handler.hpp/cpp)
 
 
 ## Data Flow Diagrams
 
-### Application Launch Flow
+### Application Initialization Flow
 ```
-User selects "1. Launch an application"
+main() starts
     ↓
-launchApp() called
+Create ApplicationService instance
+    ├─ Initializes ConfigService (loads config/termiflow.conf)
+    ├─ Initializes UIService
+    └─ Initializes ThemeManager
     ↓
-Display available apps list
+app.initialize()
+    ├─ Load config via ConfigService
+    ├─ Check auto_apply_theme setting
+    └─ Apply theme if enabled
     ↓
-User selects application
-    ↓
-Execute via system/CreateProcess
-    ↓
-User returns to main menu
+app.run() - Enter main loop
 ```
 
-### Shortcuts Management Flow
+### Main Event Loop Flow
 ```
-User selects "2. Manage shortcuts"
+UIService.displayMainMenu()  [UI Layer]
     ↓
-shortcutInteractive() called
+UIService.getMenuChoice()  [UI Layer]
     ↓
-User chooses: add/remove/list
+ApplicationService.run()  [Business Logic Layer]
+    ├─ Validate choice (0-9)
+    └─ Dispatch via switch statement
     ↓
-If add/remove:
-    ├─ Modify in-memory HashMap
-    └─ save() to file
+Feature module (Launch, Shortcuts, History, etc.)
+    ├─ Perform business logic
+    ├─ Use ConfigService for data access [Data Layer]
+    └─ Use UIService for user interaction [UI Layer]
     ↓
-If list:
-    └─ Display all shortcuts from HashMap
+Return to menu loop
+```
+
+### Theme Change Flow (SOC Example)
+```
+User selects "4. Change theme"
+    ↓
+ApplicationService.handleThemeChange()  [Business Logic]
+    ├─ UIService.getThemeInput()  [UI Layer]
+    │   └─ Display theme options and collect input
+    ├─ ThemeManager.changeTheme(theme)  [Feature Layer]
+    │   └─ Apply ANSI codes to terminal
+    ├─ ConfigService.setValue("user_interface.theme", theme)  [Data Layer]
+    ├─ ConfigService.saveConfig()  [Data Layer]
+    │   └─ Write to config/termiflow.conf
+    └─ UIService.displaySuccess()  [UI Layer]
     ↓
 Return to main menu
 ```
 
-### Theme Application Flow
-
+### Feature Feature Module Execution Pattern
 ```
-Config loaded from termiflow.conf
+ApplicationService.run()
     ↓
-Check if auto_apply_theme == "true"
+User selects menu option
     ↓
-If yes: Apply theme via ANSI codes or system calls
+ApplicationService delegates to feature module
+    ├─ Feature performs its business logic
+    ├─ Feature may call ConfigService for persistence
+    ├─ Feature may call UIService for user interaction
+    └─ Feature returns to ApplicationService
     ↓
-User selects "4. Change theme"
+ApplicationService returns to main loop
+```
+
+### Shortcuts Management Flow (SOC Example)
+```
+User selects "2. Manage shortcuts"
     ↓
-changeTheme() displays options
+ApplicationService.shortcutInteractive()  [Business Logic]
+    ├─ Load shortcuts from file
+    ├─ Display options via UIService  [UI Layer]
+    ├─ Get user choice via UIService  [UI Layer]
+    ├─ If add/remove:
+    │   ├─ Update in-memory map
+    │   ├─ Save to file via persistence
+    │   └─ Display success via UIService  [UI Layer]
+    └─ If list:
+        └─ Display all shortcuts via UIService  [UI Layer]
     ↓
-Apply theme to current terminal
-    ↓
-saveThemeToConfig() persists preference
+Return to main menu
 ```
 
 ## Known Issues & Improvements
@@ -263,6 +395,13 @@ Each issue is categorized and tracked for priority and difficulty level.
 
 ## Conclusion
 
-TermiFlow is a **modular, feature-rich terminal launcher** with a solid foundation for basic use cases. The architecture is straightforward and easy to understand, making it accessible for contributors. However, the project would benefit significantly from improved error handling, proper separation of concerns, automated testing, and a clearer abstraction layer for platform differences.
+TermiFlow has evolved into a **clean, service-oriented architecture** that follows separation of concerns principles:
 
-The current implementation prioritizes functionality and simplicity over robustness and extensibility, which is appropriate for a beta-stage project (v0.1.1).
+**Key Architectural Improvements:**
+- **Clean layers** - UI, business logic, and data access are strictly separated
+- **Single responsibility** - Each service has one reason to change
+- **Testability** - Services can be tested independently, business logic decoupled from I/O
+- **Maintainability** - Feature additions don't require modifications to core services
+- **Extensibility** - New features can be added without affecting existing code
+
+The project benefits significantly from this architectural refactoring, making it accessible for contributors and maintainable as new features are added. The codebase is positioned for future enhancements like plugin systems, REST APIs, or database backends without requiring major architectural changes.
