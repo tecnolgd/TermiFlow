@@ -30,7 +30,7 @@
 
 TermiFlow follows a **three-layer service-oriented architecture**:
 
-### 1. **Entry Point: main.cpp**
+### 1. Entry Point: main.cpp
 
 **Responsibility:** Application bootstrap and error handling
 
@@ -41,7 +41,7 @@ TermiFlow follows a **three-layer service-oriented architecture**:
 - Minimal code, delegates all logic to ApplicationService
 
 **Current Flow:**
-```
+```txt
 Application Start
     ↓
 Create ApplicationService
@@ -53,9 +53,9 @@ Run main loop (orchestrated by ApplicationService)
 Exception handling and cleanup
 ```
 
-### 2. **Core Services (Service Layer)**
+### 2. Core Services (Service Layer)
 
-#### A. **ApplicationService** (application_service.hpp/cpp)
+#### A. ApplicationService (application_service.hpp/cpp)
 
 **Purpose:** Core business logic orchestration and application control flow
 
@@ -80,7 +80,7 @@ Exception handling and cleanup
 
 **Architecture Pattern:** Dependency injection and facade pattern
 
-#### B. **UIService** (ui_service.hpp/cpp)
+#### B. UIService (ui_service.hpp/cpp)
 
 **Purpose:** Centralize all user interface and presentation logic
 
@@ -105,7 +105,7 @@ Exception handling and cleanup
 - Centralized output - all presentation goes through this service
 - Enables easy testing (can be mocked or replaced)
 
-#### C. **ConfigService** (config_service.hpp/cpp)
+#### C. ConfigService (config_service.hpp/cpp)
 
 **Purpose:** Manage all configuration file I/O and data access
 
@@ -145,9 +145,9 @@ show_banner=true
 auto_apply_theme=true
 ```
 
-### 3. **Feature Modules**
+### 3. Feature Modules
 
-#### A. **Theme Manager** (theme_manager.hpp/cpp)
+#### A. Theme Manager (theme_manager.hpp/cpp)
 
 **Purpose:** Apply and manage terminal color themes
 
@@ -159,26 +159,13 @@ auto_apply_theme=true
 
 **Implementation:** Uses ANSI escape sequences for terminal color control
 
-**Note:** In the new SOC architecture:
-- Theme application logic is isolated in this module
-- Theme persistence is handled by `ConfigService`
-- Theme UI interaction is delegated to `UIService`
-- ApplicationService coordinates between these services
+> **Note:** In the new SOC architecture:     
+> - Theme application logic is isolated in this module
+> - Theme persistence is handled by `ConfigService`
+> - Theme UI interaction is delegated to `UIService`
+> - ApplicationService coordinates between these services
 
-#### B. **Launcher** (launch.hpp/cpp)
-
-**Purpose:** Execute/launch system applications
-
-**Key Functions:**
-- `launchApp()` - Interactive app selection and launching
-- `launchApp(std::string appName)` - Direct app launch
-
-**Functionality:**
-- Presents list of available applications
-- User selects application to launch
-- Executes application via system/platform-specific calls
-
-#### B. **Launcher** (launch.hpp/cpp)
+#### B. Launcher (launch.hpp/cpp)
 
 **Purpose:** Execute/launch system applications
 
@@ -197,30 +184,7 @@ auto_apply_theme=true
 
 **Integration:** Called by `ApplicationService` on menu option '1'
 
-#### C. **Shortcuts** (shortcuts.hpp/cpp)
-
-**Purpose:** Define and manage custom command shortcuts
-
-**Architecture:** Class-based with state management
-
-```cpp
-class shortcuts {
-    // Storage
-    std::unordered_map<std::string, std::string> shortMap;
-    std::string filepath;
-    
-    // Methods
-    void add(const std::string& key, const std::string& value);
-    void remove(const std::string& key);
-    void save();
-    void list();
-    void load();
-    bool exists(const std::string& value);
-    std::string getValue(const std::string& key);
-};
-```
-
-#### C. **Shortcuts** (shortcuts.hpp/cpp)
+#### C. Shortcuts (shortcuts.hpp/cpp)
 
 **Purpose:** Define and manage custom command shortcuts
 
@@ -251,7 +215,7 @@ class shortcuts {
 
 **Integration:** Called by `ApplicationService` on menu option '2'
 
-#### D. **History** (history.hpp/cpp)
+#### D. History (history.hpp/cpp)
 
 **Purpose:** Track and display command history
 
@@ -279,7 +243,7 @@ class history {
 
 **Integration:** Called by `ApplicationService` on menu option '6'
 
-#### E. **Session Manager** (session_manager.hpp/cpp)
+#### E. Session Manager (session_manager.hpp/cpp)
 
 **Purpose:** Manage sessions and running tasks
 
@@ -287,7 +251,7 @@ class history {
 
 **Integration:** Called by `ApplicationService` on menu option '3'
 
-#### F. **System Stats** (system_stats.hpp/cpp)
+#### F. System Stats (system_stats.hpp/cpp)
 
 **Purpose:** Display system information and statistics
 
@@ -298,13 +262,14 @@ class history {
 
 **Integration:** Called by `ApplicationService` on menu option '7'
 
-#### G. **Command Handler** (command_handler.hpp/cpp)
+#### G. Command Handler (command_handler.hpp/cpp)
 
 
 ## Data Flow Diagrams
 
 ### Application Initialization Flow
-```
+
+```txt
 main() starts
     ↓
 Create ApplicationService instance
@@ -321,7 +286,7 @@ app.run() - Enter main loop
 ```
 
 ### Main Event Loop Flow
-```
+```txt
 UIService.displayMainMenu()  [UI Layer]
     ↓
 UIService.getMenuChoice()  [UI Layer]
@@ -338,8 +303,9 @@ Feature module (Launch, Shortcuts, History, etc.)
 Return to menu loop
 ```
 
-### Theme Change Flow (SOC Example)
-```
+### Theme Change Flow
+
+```txt
 User selects "4. Change theme"
     ↓
 ApplicationService.handleThemeChange()  [Business Logic]
@@ -356,7 +322,8 @@ Return to main menu
 ```
 
 ### Feature Feature Module Execution Pattern
-```
+
+```txt
 ApplicationService.run()
     ↓
 User selects menu option
@@ -370,8 +337,9 @@ ApplicationService delegates to feature module
 ApplicationService returns to main loop
 ```
 
-### Shortcuts Management Flow (SOC Example)
-```
+### Shortcuts Management Flow
+
+```txt
 User selects "2. Manage shortcuts"
     ↓
 ApplicationService.shortcutInteractive()  [Business Logic]
@@ -386,6 +354,36 @@ ApplicationService.shortcutInteractive()  [Business Logic]
         └─ Display all shortcuts via UIService  [UI Layer]
     ↓
 Return to main menu
+```
+
+### Command Handler Flow (Alternative Interface)
+
+```txt
+User selects "9. Command Handler" (or accessed directly)
+    ↓
+cmdHandler() main loop starts
+    ↓
+Display ">>>" prompt
+    ↓
+Read user input (e.g., "launch chrome")
+    ↓
+Tokenize input via std::stringstream
+    ↓
+Extract command (e.g., "launch")
+    ↓
+Match command and validate arguments
+    ↓
+Branch to feature handler:
+    ├─ "launch": Call launchApp(tokens[1])
+    ├─ "theme": Call changeTheme(tokens[1])
+    ├─ "shortcut": Call shortcuts.add/remove/list()
+    ├─ "history": Call history.add/list/clear/goto()
+    ├─ "stats": Call statsInteractive()
+    └─ Unknown: Display error and usage info
+    ↓
+Add command to history
+    ↓
+Return to command prompt (loop continues)
 ```
 
 ## Known Issues & Improvements
