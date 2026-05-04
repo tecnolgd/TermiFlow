@@ -4,11 +4,17 @@
 - ✅ **Current:** 
   - C++ core with modular architecture    
   - Currently Windows-optimized. Linux/macOS support coming soon.
-  - Makefile added for modular build and run.
-  -  Detailed Architecture breakdown and tool info in `assets/docs/architecture.md`
+  - **Makefile** added for modular build and run.
+  - Detailed Architecture breakdown and tool info in `assets/docs/architecture.md`
+  - **Service-oriented** architecture with proper layer separation
+  - **ApplicationService** orchestration pattern
+  - **UIService** for centralized presentation logic
+  - **ConfigService** for isolated file I/O
+  - Feature modules with clear responsibilities
 
 - 🔄 **In Progress:** 
   - Implemetation of Arch. diagrams and docs 
+  - Error handling and logging improvements
 
 - 📋 **Planned:**
   - Cross-platform support (Linux, macOS)
@@ -16,8 +22,8 @@
   - Enhanced system stats (CPU, network, etc.)
   - Scripting and automation features
   - Additional themes and customization options
-  - Architecture breakdown
   - Benchmarks and test cases
+  - Automated testing and mocking support
   - Performance optimizations
   - cmake for efficient tool build and run
 
