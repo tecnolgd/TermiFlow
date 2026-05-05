@@ -3,9 +3,7 @@
 #include "../../include/application_service.hpp"
 #include "../../include/launch.hpp"
 #include "../../include/shortcuts.hpp"
-#include "../../include/task_manager.hpp"
 #include "../../include/history.hpp"
-#include "../../include/session_manager.hpp"
 #include "../../include/system_stats.hpp"
 #include "../../include/command_handler.hpp"
 #include <iostream>
@@ -36,7 +34,7 @@ void ApplicationService::run() {
                     shortcutInteractive();
                     break;
                 case '3':
-                    sessionManager();
+                    uiService.displayMessage(">> Not available for the current version. <<");
                     break;
                 case '4':
                     handleThemeChange();
