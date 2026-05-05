@@ -68,9 +68,7 @@ void ApplicationService::shortcutInteractive() {
     ::shortcutInteractive();
 }
 
-void ApplicationService::sessionManager() {
-    uiService.displayMessage("Session management coming soon!");
-}
+
 
 void ApplicationService::historyInteractive() {
     ::historyInteractive();
