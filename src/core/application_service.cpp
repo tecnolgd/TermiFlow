@@ -39,11 +39,17 @@ void ApplicationService::run() {
                 case '4':
                     handleThemeChange();
                     break;
+                case '5':
+                    uiService.displayMessage(">> Not available for the current version. <<");
+                    break;
                 case '6':
                     historyInteractive();
                     break;
                 case '7':
                     statsInteractive();
+                    break;
+                case '8':
+                    uiService.displayMessage(">> Not available for the current version. <<");
                     break;
                 case '9':
                     cmdHandler();
