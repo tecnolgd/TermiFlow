@@ -8,14 +8,12 @@ void UIService::displayMainMenu() {
     std::cout << "\n\t--- TermiFlow (beta) ---\n";
     std::cout << "1. Launch an application\n";
     std::cout << "2. Manage shortcuts\n";
-    std::cout << "3. View running tasks\n";
+    std::cout << "3. View running tasks (unavailable)\n";
     std::cout << "4. Change theme\n";
-    std::cout << "5. Config settings\n";
+    std::cout << "5. Config settings (unavailable)\n";
     std::cout << "6. Check History\n";
     std::cout << "7. View system stats\n";
-    std::cout << "8. Session manager\n";
-    std::cout << "9. Command handling\n";
-    std::cout << "0. Exit\n";
+    std::cout << "8. Session manager (unavailable)\n";
 }
 
 char UIService::getMenuChoice() {

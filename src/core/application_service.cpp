@@ -3,9 +3,7 @@
 #include "../../include/application_service.hpp"
 #include "../../include/launch.hpp"
 #include "../../include/shortcuts.hpp"
-#include "../../include/task_manager.hpp"
 #include "../../include/history.hpp"
-#include "../../include/session_manager.hpp"
 #include "../../include/system_stats.hpp"
 #include "../../include/command_handler.hpp"
 #include <iostream>
@@ -36,16 +34,22 @@ void ApplicationService::run() {
                     shortcutInteractive();
                     break;
                 case '3':
-                    sessionManager();
+                    uiService.displayMessage(">> Not available for the current version. <<");
                     break;
                 case '4':
                     handleThemeChange();
+                    break;
+                case '5':
+                    uiService.displayMessage(">> Not available for the current version. <<");
                     break;
                 case '6':
                     historyInteractive();
                     break;
                 case '7':
                     statsInteractive();
+                    break;
+                case '8':
+                    uiService.displayMessage(">> Not available for the current version. <<");
                     break;
                 case '9':
                     cmdHandler();
@@ -70,9 +74,7 @@ void ApplicationService::shortcutInteractive() {
     ::shortcutInteractive();
 }
 
-void ApplicationService::sessionManager() {
-    uiService.displayMessage("Session management coming soon!");
-}
+
 
 void ApplicationService::historyInteractive() {
     ::historyInteractive();
