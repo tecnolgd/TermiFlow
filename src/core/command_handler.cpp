@@ -9,7 +9,6 @@
 #include "../../include/shortcuts.hpp"
 #include "../../include/history.hpp"
 #include "../../include/system_stats.hpp"
-#include "../../include/config_loader.hpp"
 
 void cmdHandler() {
     shortcuts s;
