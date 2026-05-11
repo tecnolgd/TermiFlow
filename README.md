@@ -207,6 +207,7 @@ For more details, refer to:
 
 ## Contributors
 A huge thanks to the developers contributing to TermiFlow.
+
 - [@iamkyrin](https://github.com/iamkyrin)
 - [@tanayqq](https://github.com/tanayqq)
 
@@ -221,5 +222,5 @@ If TermiFlow has positively impacted your workflow, consider:
 ## Author & Version
 
 - **Author:** tecnolgd  
-- **Version:** v0.1.1-beta  
+- **Version:** v0.2.1-beta  
 - **License:** [MIT License](LICENSE.md)
