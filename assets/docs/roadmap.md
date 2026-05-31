@@ -11,6 +11,7 @@
   - **UIService** for centralized presentation logic
   - **ConfigService** for isolated file I/O
   - Feature modules with clear responsibilities
+  - RAII for improved exception safety and reduced memory leaks
 
 - 🔄 **In Progress:** 
   - Implemetation of Arch. diagrams and docs 
