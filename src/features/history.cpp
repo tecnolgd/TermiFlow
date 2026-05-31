@@ -16,7 +16,6 @@ void history::load() {
     while(std::getline(infile, line)) {
         cmdEntries.push_back(line);
     }
-    infile.close();
 }
 
 void history::save() {
@@ -24,7 +23,6 @@ void history::save() {
     for(auto& e : cmdEntries) { //for each loop
         outfile << e << "\n";
     }
-    outfile.close();
 }
 
 history::history(){

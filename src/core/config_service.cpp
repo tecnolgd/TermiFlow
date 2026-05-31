@@ -39,7 +39,6 @@ Config ConfigService::loadConfig() {
         }
     }
 
-    file.close();
     return config;
 }
 
@@ -56,8 +55,6 @@ void ConfigService::saveConfig() {
          << "show_banner=" << getValue("user_interface.show_banner", "true") << "\n\n"
          << "[behavior]\n"
          << "auto_apply_theme=" << getValue("behavior.auto_apply_theme", "true") << "\n";
-    
-    file.close();
 }
 
 std::string ConfigService::getValue(const std::string& key, const std::string& defaultValue) {
