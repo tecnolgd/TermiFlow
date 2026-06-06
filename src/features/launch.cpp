@@ -3,7 +3,7 @@
 #include <iostream>
 #include "../../include/launch.hpp"
 #include "../../include/shortcuts.hpp"
-
+#include <regex>
 //interactive mode launch app function
 void launchApp() {
     shortcuts s;
@@ -19,8 +19,17 @@ void launchApp() {
         launchApp(appName);
     }
 }
+bool isValidAppName(const std::string& appName) {
+    // केवल सुरक्षित कैरेक्टर्स की अनुमति दें (अल्फा-न्यूमेरिक)
+    const std::regex pattern("^[a-zA-Z0-9._-]+$");
+    return std::regex_match(appName, pattern);
+}
 
 void launchApp(std::string appName) {
+    if (!isValidAppName(appName)) {
+        std::cout << "Security Alert: Invalid characters detected in input!" << std::endl;
+        return; 
+    }
     std::string command;
     
 #ifdef _WIN32
