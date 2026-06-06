@@ -224,3 +224,9 @@ If TermiFlow has positively impacted your workflow, consider:
 - **Author:** tecnolgd  
 - **Version:** v0.2.1-beta  
 - **License:** [MIT License](LICENSE.md)
+
+- ### Changes
+Added input validation in the `launchApp` function to sanitize user input and prevent potential command injection vulnerabilities.
+
+### Issue
+Closes #34
