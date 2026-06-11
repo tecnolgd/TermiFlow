@@ -45,3 +45,4 @@ Looking for a place to start?
 Check     
 - [Roadmap](assets/docs/roadmap.md) for planned ideas
 - [Open Issues](https://github.com/tecnolgd/TermiFlow/issues) to find bugs and features you can contribute to
+
