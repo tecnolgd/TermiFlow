@@ -1,4 +1,3 @@
-
 ## Contributing to TermiFlow
 Thank you for your interest in contributing to TermiFlow! We aim to build a high-performance, minimalist terminal dashboard.
 
@@ -16,6 +15,7 @@ To set up your local development environment and build the project, please follo
 - **Performance:** TermiFlow’s core goal is low overhead. Any new feature should have a minimal footprint on system resources.
 
 - **Testing:** If you add a new metric (e.g., Disk I/O or GPU stats), please ensure it is modular and doesn't break the main loop.
+
 
 ## The Required Contribution Workflow
 
