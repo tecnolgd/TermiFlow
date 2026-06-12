@@ -480,6 +480,75 @@ Add command to history
 Return to command prompt (loop continues)
 ```
 
+## Data File Formats
+
+TermiFlow stores data in plain text files for easy inspection and portability.
+
+### Shortcuts File (assets/textfiles/shortcut_det.txt)
+
+**Format:** Key-value pairs, one per line
+```
+shortcut_name=command_name
+```
+
+**Rules:**
+- Separator: = (no spaces around it)
+- Shortcut names must not contain = character
+- Each line is a separate shortcut
+- Example: c=chrome, v=code, s=stats
+
+**Guidelines:**
+- DO: Add new lines with format shortcut=command
+- DON'T: Use = in shortcut names
+- DON'T: Leave spaces around the = sign
+
+### History File (assets/textfiles/history.txt)
+
+**Format:** One command per line, in chronological order
+```
+command_1
+command_2
+command_3
+    .
+    .
+    .
+command_n
+```
+
+**Rules:**
+- Each executed command is recorded on a new line
+- Oldest commands first, newest last
+- No special formatting required
+
+**Guidelines:**
+- DO: Let TermiFlow automatically manage this file
+- DON'T: Avoid manual editing (breaks historical accuracy)
+- WARNING: If editing manually, preserve chronological order
+
+### Configuration File (config/termiflow.conf)
+
+**Format:** INI-like sections with key-value pairs
+```ini
+[user_interface]
+theme=dark
+show_banner=true
+
+[behavior]
+auto_apply_theme=true
+```
+
+**Supported Keys:**
+- [user_interface]
+  - theme: light or dark (default: dark)
+  - show_banner: true or false (default: true)
+- [behavior]
+  - auto_apply_theme: true or false (default: false)
+
+**Data Validation:**
+- Invalid lines are skipped silently during parsing
+- Files are loaded on startup and saved when changes are made
+- Missing files are created automatically with defaults
+
 ## Known Issues & Improvements
 
 For a comprehensive list of known limitations, ongoing issues, and opportunities to contribute, please refer to the [GitHub Issues](https://github.com/tecnolgd/TermiFlow/issues) tab.    
