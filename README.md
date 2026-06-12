@@ -210,6 +210,7 @@ A huge thanks to the developers contributing to TermiFlow.
 
 - [@iamkyrin](https://github.com/iamkyrin)
 - [@tanayqq](https://github.com/tanayqq)
+- [@Adhirajsingh2507](https://github.com/Adhirajsingh2507)
 
 ## Support This Project
 
