@@ -26,8 +26,14 @@ CXXFLAGS = -fdiagnostics-color=always -g -fexceptions -I./$(INCLUDE_DIR)
 LINUX_CXXFLAGS = $(CXXFLAGS)
 WINDOWS_CXXFLAGS = $(CXXFLAGS) -static -static-libgcc -static-libstdc++
 
+# Test configuration
+TEST_DIR = tests
+TEST_MAIN = $(TEST_DIR)/main_test.cpp
+TEST_SRCS = $(filter-out $(TEST_MAIN),$(wildcard $(TEST_DIR)/*_test.cpp))
+TEST_OUTPUT = $(BUILD_DIR)/test_runner
+
 # Phony targets
-.PHONY: all help build linux windows clean rebuild run
+.PHONY: all help build linux windows clean rebuild run test
 
 # Default target
 all: linux
@@ -39,6 +45,7 @@ help:
 	@echo "  make build             - Build for current platform (Linux/Windows)"
 	@echo "  make linux             - Build Linux executable (default)"
 	@echo "  make windows           - Build Windows executable (requires MinGW)"
+	@echo "  make test              - Build and run unit tests (native framework)"
 	@echo "  make run               - Build and run Linux executable"
 	@echo "  make rebuild           - Clean and rebuild for current platform"
 	@echo "  make clean             - Remove build artifacts"
@@ -46,8 +53,8 @@ help:
 	@echo ""
 	@echo "Examples:"
 	@echo "  make                   - Build Linux version"
+	@echo "  make test              - Build and run tests"
 	@echo "  make windows           - Build Windows .exe"
-	@echo "  make run               - Build and run on Linux"
 	@echo "  make clean rebuild     - Clean and rebuild"
 
 # Create build directory
@@ -77,6 +84,15 @@ run: linux
 # Rebuild target
 rebuild: clean build
 	@echo "✓ Rebuild complete"
+
+# Test target - uses native C++ test framework (no external dependencies)
+test: $(BUILD_DIR)
+	@echo "Building unit tests..."
+	$(CXX) $(LINUX_CXXFLAGS) $(CORE_SRCS) $(FEATURES_SRCS) $(TEST_SRCS) $(TEST_MAIN) -o $(TEST_OUTPUT)
+	@echo "✓ Test build complete"
+	@echo ""
+	@echo "Running tests..."
+	./$(TEST_OUTPUT)
 
 # Clean build artifacts
 clean:
