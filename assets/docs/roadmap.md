@@ -12,6 +12,7 @@
   - **ConfigService** for isolated file I/O
   - Feature modules with clear responsibilities
   - RAII for improved exception safety and reduced memory leaks
+  - Unit testing suite
 
 - 🔄 **In Progress:** 
   - Implemetation of Arch. diagrams and docs 
@@ -23,7 +24,7 @@
   - Enhanced system stats (CPU, network, etc.)
   - Scripting and automation features
   - Additional themes and customization options
-  - Benchmarks and test cases
+  - Benchmarking suite
   - Automated testing and mocking support
   - Performance optimizations
   - cmake for efficient tool build and run
