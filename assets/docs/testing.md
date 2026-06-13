@@ -9,7 +9,7 @@ This project uses a **native C++ test framework** (no external dependencies). Te
 
 ## Prerequisites
 
-**No installation required!** The test framework is built-in and has zero external dependencies.
+**No extra installation required!** The test framework is built-in and has zero external dependencies apart from the tool [prerequisites](../../README.md#prerequisites)
 
 ## Running Tests
 
@@ -17,7 +17,7 @@ This project uses a **native C++ test framework** (no external dependencies). Te
 ```bash
 make test      # Build and run all unit tests
 ```
-#### Two step way
+### Two step way
 
 1. 
     ```bash
@@ -114,5 +114,3 @@ TEST(MyModule_TestDescription) {
 - `EXPECT_FALSE(condition)` - False
 - `EXPECT_THROW(statement, exception_type)` - Throws exception
 - `EXPECT_NO_THROW(statement)` - Does not throw
-
-
