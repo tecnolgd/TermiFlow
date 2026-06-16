@@ -3,7 +3,7 @@
 #include "../../include/config_service.hpp"
 #include <fstream>
 #include <sstream>
-#include <iostream>
+#include <stdexcept>
 
 ConfigService::ConfigService(const std::string& path) : configPath(path) {
     loadConfig();
@@ -45,8 +45,7 @@ Config ConfigService::loadConfig() {
 void ConfigService::saveConfig() {
     std::ofstream file(configPath);
     if (!file.is_open()) {
-        std::cerr << "Error: Could not open config file for writing!\n";
-        return;
+        throw std::runtime_error("Could not open config file for writing");
     }
 
     // Write organized config sections
