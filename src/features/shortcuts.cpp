@@ -1,12 +1,12 @@
 //shortcuts.cpp file: for creating and managing user-defined shortcuts (for launch commands as of now)
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 #include "../../include/shortcuts.hpp"
 
 void shortcuts::add(const std::string& shortcut, const std::string& app){
-    shortMap[shortcut]=app; //store shortMap[shortcut] = app
+    shortMap[shortcut] = app; //store shortMap[shortcut] = app
     save();
-    std::cout<<"Yeah !. Shortcut added: "<<app<<" -> "<<shortcut<<"\n";
 }
 
 void shortcuts::add(){
@@ -53,8 +53,11 @@ void shortcuts::remove(){
 }
 
 void shortcuts::remove(const std::string& shortcut){
-    shortMap.erase(shortcut); //erase the shortcut from the map
-    std::cout<<"Shortcut /'"<<shortcut<<"/' removed!.\n";
+    auto it = shortMap.find(shortcut);
+    if (it == shortMap.end()) {
+        throw std::runtime_error("Shortcut not found: " + shortcut);
+    }
+    shortMap.erase(it); //erase the shortcut from the map
     save();
 }
 

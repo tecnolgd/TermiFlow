@@ -81,7 +81,11 @@ void ApplicationService::historyInteractive() {
 }
 
 void ApplicationService::statsInteractive() {
-    ::statsInteractive();
+    uiService.displayMessage("Stats loading...");
+    uiService.displayMessage(">>>>>>>>>>>>>> ");
+    uiService.displayMessage(SystemStats::getCPU_Usage());
+    uiService.displayMessage(SystemStats::getMemoryUsage());
+    uiService.displayMessage(SystemStats::getUptime());
 }
 
 void ApplicationService::cmdHandler() {

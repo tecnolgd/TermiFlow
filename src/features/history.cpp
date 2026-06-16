@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include "../../include/history.hpp"
 
 //go through and understand all of these functions and what they do. write comments once its clear to follow through.
@@ -42,9 +43,8 @@ void history::list(){
 }
 
 std::string history::get(int index){
-    if(index < 1 || index > (int)cmdEntries.size()){
-        std::cout<<"Oops !. Command not found.\n";
-        return "";
+    if(index < 1 || index > static_cast<int>(cmdEntries.size())){
+        throw std::out_of_range("Command not found at index: " + std::to_string(index));
     }
     return cmdEntries[index - 1];
 }
@@ -52,7 +52,6 @@ std::string history::get(int index){
 void history::historyClear(){
     cmdEntries.clear(); //to clear contents of vector cmdEntries.
     save();
-    std::cout<<"History cleared!. Type some new commands to fill the cmd history.\n";
 }
 
 //interactive mode history operations handler function

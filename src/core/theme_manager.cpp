@@ -1,6 +1,7 @@
 //theme_manager.cpp: Handles theme application logic only
 // File I/O for theme persistence is handled by ConfigService
 #include "../../include/theme_manager.hpp"
+#include <stdexcept>
 
 void changeTheme(std::string theme) {
     // Apply theme to terminal (business logic only)
@@ -14,7 +15,7 @@ void changeTheme(std::string theme) {
             system("color 07"); // black background with white text / default theme
         }
         else {
-            std::cerr << "Invalid theme: " << theme << "\n";
+            throw std::invalid_argument("Invalid theme: " + theme);
         }
     #else
         if (theme == "light") {
@@ -24,15 +25,8 @@ void changeTheme(std::string theme) {
             std::cout << "\033[40;37m"; // black background with white text / default theme
         }
         else {
-            std::cerr << "Invalid theme: " << theme << "\n";
+            throw std::invalid_argument("Invalid theme: " + theme);
         }
     #endif
 }
-
-// Interactive mode - UI is delegated to UIService in the new architecture
-// This function is kept for backward compatibility but should use UIService
-
-
-// DEPRECATED: File I/O is now handled by ConfigService
-// This function is removed - use ConfigService::saveConfig() instead
 

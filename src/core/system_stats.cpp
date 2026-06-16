@@ -9,7 +9,6 @@
 #else
     #include <unistd.h>
     #include <sys/sysinfo.h>
-    #include <fstream>
 #endif
 
 std::string SystemStats::getCPU_Usage() {
