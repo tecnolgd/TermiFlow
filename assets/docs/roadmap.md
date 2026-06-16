@@ -13,10 +13,11 @@
   - Feature modules with clear responsibilities
   - RAII for improved exception safety and reduced memory leaks
   - Unit testing suite
+  - Consistent error handling across core and feature modules using modern C++ exception handling
 
 - 🔄 **In Progress:** 
   - Implemetation of Arch. diagrams and docs 
-  - Error handling and logging improvements
+  - Logging improvements
 
 - 📋 **Planned:**
   - Cross-platform support (Linux, macOS)
