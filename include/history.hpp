@@ -1,6 +1,6 @@
 //header file for history.cpp
-#ifndef HISTORY
-#define HISTORY
+#ifndef HISTORY_HPP
+#define HISTORY_HPP
 
 #include <string>
 #include <vector>

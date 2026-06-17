@@ -1,7 +1,7 @@
 //header file for config_service.hpp
 // Handles all file I/O operations for configuration
-#ifndef CONFIG_SERVICE_H
-#define CONFIG_SERVICE_H
+#ifndef CONFIG_SERVICE_HPP
+#define CONFIG_SERVICE_HPP
 
 #include <string>
 #include <unordered_map>

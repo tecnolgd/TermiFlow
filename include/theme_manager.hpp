@@ -1,6 +1,6 @@
 //header file for theme_manager.cpp
-#ifndef THEME_MANAGER_H
-#define THEME_MANAGER_H
+#ifndef THEME_MANAGER_HPP
+#define THEME_MANAGER_HPP
 
 #include <iostream>
 #include <cstdlib>

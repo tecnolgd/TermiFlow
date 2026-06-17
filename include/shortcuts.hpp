@@ -1,6 +1,6 @@
 //header file for shortcuts.cpp 
-#ifndef SHORTCUTS
-#define SHORTCUTS
+#ifndef SHORTCUTS_HPP
+#define SHORTCUTS_HPP
 
 #include <string>
 #include <sstream>

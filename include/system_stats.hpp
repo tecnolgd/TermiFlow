@@ -1,6 +1,6 @@
 //header file for system_stats.cpp
-#ifndef SYSTEM_STATS
-#define SYSTEM_STATS
+#ifndef SYSTEM_STATS_HPP
+#define SYSTEM_STATS_HPP
 
 #include <string>
 
