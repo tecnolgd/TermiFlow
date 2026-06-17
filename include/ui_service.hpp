@@ -1,7 +1,7 @@
 //header file for ui_service.hpp
 // Handles all user interaction and presentation logic
-#ifndef UI_SERVICE_H
-#define UI_SERVICE_H
+#ifndef UI_SERVICE_HPP
+#define UI_SERVICE_HPP
 
 #include <string>
 

@@ -1,6 +1,6 @@
 //header file for launch.cpp
-#ifndef LAUNCHER
-#define LAUNCHER
+#ifndef LAUNCHER_HPP
+#define LAUNCHER_HPP
 #include <string>
 
 void launchApp();

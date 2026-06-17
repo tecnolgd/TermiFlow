@@ -1,7 +1,7 @@
 //header file for application_service.hpp
 // Handles core business logic and application orchestration
-#ifndef APPLICATION_SERVICE_H
-#define APPLICATION_SERVICE_H
+#ifndef APPLICATION_SERVICE_HPP
+#define APPLICATION_SERVICE_HPP
 
 #include <string>
 #include "config_service.hpp"
