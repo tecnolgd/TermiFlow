@@ -20,7 +20,7 @@
 - **Template / Suggested config**
 
     Copy this template to start with sensible defaults:
-    ```conf
+    ```ini
     [user_interface]
     theme=dark
     show_banner=true
