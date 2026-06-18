@@ -11,6 +11,7 @@
 - **Compiler:** g++ or MinGW (for Windows)
 - **Platform:** Linux/Windows (cross-platform via conditional compilation)
 - **Configuration:** Plain text config file (INI-like format)
+ - **Configuration:** Plain text config file (INI-like format). For full details and examples, see [TermiFlow Config Docs](config.md#termiflow-configuration-file-termiflowconf).
 - **Data Storage:** File-based (shortcuts, history, config)
 
 
@@ -144,6 +145,7 @@ show_banner=true
 [behavior]
 auto_apply_theme=true
 ```
+> For more details, check [TermiFlow Config Docs](config.md#termiflow-configuration-file-termiflowconf)
 
 ### 3. Feature Modules
 

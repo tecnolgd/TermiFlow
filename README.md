@@ -187,6 +187,7 @@ TermiFlow follows **clean architecture** principles with clear separation betwee
 - [**Architecture**](assets/docs/architecture.md)
 - [**Commands Reference**](assets/docs/command_reference.md)
 - [**Testing**](assets/docs/testing.md)
+- [**Configuration**](assets/docs/config.md)
 - [**Roadmap**](assets/docs/roadmap.md)
 
 For more details, refer to:
