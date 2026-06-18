@@ -14,6 +14,8 @@ void UIService::displayMainMenu() {
     std::cout << "6. Check History\n";
     std::cout << "7. View system stats\n";
     std::cout << "8. Session manager (unavailable)\n";
+    std::cout << "9. Command Handler\n";
+    std::cout << "0. Exit\n";
 }
 
 char UIService::getMenuChoice() {
