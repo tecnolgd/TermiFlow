@@ -14,6 +14,7 @@
   - RAII for improved exception safety and reduced memory leaks
   - Unit testing suite
   - Consistent error handling across core and feature modules using modern C++ exception handling
+  - Config Documentation 
 
 - 🔄 **In Progress:** 
   - Implemetation of Arch. diagrams and docs 
