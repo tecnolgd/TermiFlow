@@ -145,8 +145,7 @@ show_banner=true
 [behavior]
 auto_apply_theme=true
 ```
-
->
+> For more details, check [TermiFlow Config Docs](config.md#termiflow-configuration-file-termiflowconf)
 
 ### 3. Feature Modules
 
