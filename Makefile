@@ -22,7 +22,7 @@ FEATURES_SRCS = $(wildcard $(FEATURES_DIR)/*.cpp)
 ALL_SRCS = $(MAIN_SRC) $(CORE_SRCS) $(FEATURES_SRCS)
 
 # Compiler flags
-CXXFLAGS = -fdiagnostics-color=always -g -fexceptions -I./$(INCLUDE_DIR)
+CXXFLAGS = -std=c++17 -fdiagnostics-color=always -g -fexceptions -I./$(INCLUDE_DIR)
 LINUX_CXXFLAGS = $(CXXFLAGS)
 WINDOWS_CXXFLAGS = $(CXXFLAGS) -static -static-libgcc -static-libstdc++
 
