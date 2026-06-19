@@ -26,7 +26,7 @@ View previously executed commands:
 ```bash
 history list                        # Display command history
 history clear                       # Clear command history
-history goto [index]              # Go to a particular command using the index assigned to it.
+history goto [index]                # Display the command at the given history index.
 ```
 
 #### Theme Management

@@ -310,11 +310,11 @@ class history {
    ```bash
    history list                   // Display all commands
    history clear                  // Clear history
-   history goto <index>           // Re-execute command at index
+   history goto <index>           // Display the command at the given history index
    
    Examples:
    history list                   // Show all commands
-   history goto 0                 // Re-run first command
+   history goto 1                 // Display the first command
    ```
 
 5. **stats** - Display system statistics
