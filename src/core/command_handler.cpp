@@ -100,23 +100,17 @@ void cmdHandler() {
             std::cout << "Command - handler terminated !\n";
             return;
         }
-        else if (command == "help") {
-    std::cout << "\n========== TERMIFLOW HELP ==========\n";
-    std::cout << "launch <app>               - Launch an application\n";
-    std::cout << "shortcut add <name> <app>  - Create a shortcut\n";
-    std::cout << "shortcut remove <name>     - Remove a shortcut\n";
-    std::cout << "shortcut list              - List all shortcuts\n";
-    std::cout << "tasks                      - View running tasks\n";
-    std::cout << "theme <light/dark>         - Change application theme\n";
-    std::cout << "config                     - Manage configuration settings\n";
-    std::cout << "history list               - Show command history\n";
-    std::cout << "history clear              - Clear command history\n";
-    std::cout << "history goto <index>       - Execute a command from history\n";
-    std::cout << "stats                      - Show CPU, memory and uptime stats\n";
-    std::cout << "sm                         - Open session manager\n";
-    std::cout << "help                       - Show this help message\n";
-    std::cout << "exit | quit                - Exit TermiFlow\n";
-    std::cout << "====================================\n";
+       else if (command == "help") {
+    std::cout << "\n\t-- Available commands --\n";
+    std::cout << "launch <app>                    : Launch an application\n";
+    std::cout << "shortcut <add/remove/list>      : Manage shortcuts\n";
+    std::cout << "tasks                           : View running tasks\n";
+    std::cout << "theme <light/dark>              : Change theme\n";
+    std::cout << "config                          : Config settings\n";
+    std::cout << "history <clear/list/goto>       : View history commands\n";
+    std::cout << "stats                           : View system stats\n";
+    std::cout << "sm                              : Session manager\n";
+    std::cout << "exit/quit                       : Exit\n";
 }
         else {
             std::cout << "Unknown command. Type 'help'.\n";
