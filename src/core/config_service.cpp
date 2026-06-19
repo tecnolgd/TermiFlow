@@ -1,6 +1,7 @@
 // Implementation of ConfigService
 // Handles all file I/O operations for configuration
 #include "../../include/config_service.hpp"
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
@@ -43,6 +44,11 @@ Config ConfigService::loadConfig() {
 }
 
 void ConfigService::saveConfig() {
+    std::filesystem::path dir = std::filesystem::path(configPath).parent_path();
+    if (!dir.empty()) {
+        std::filesystem::create_directories(dir);
+    }
+
     std::ofstream file(configPath);
     if (!file.is_open()) {
         throw std::runtime_error("Could not open config file for writing");
