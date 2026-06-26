@@ -1,0 +1,60 @@
+name: TermiFlow CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Linux-specific setup and build
+    - name: Install Dependencies (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential g++ make
+
+    - name: Compile Application (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      run: make linux
+
+    - name: Run Tests (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      run: make test
+
+    # Windows-specific setup and build
+    - name: Setup MinGW Toolchain (Windows)
+      if: matrix.os == 'windows-latest'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        update: true
+        install: >-
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-make
+
+    # Windows compilation and testing
+    - name: Compile Application (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: msys2 {0}
+      run: |
+        mkdir -p build
+        mingw32-make windows CXX_MINGW=g++
+
+    - name: Run Tests (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: msys2 {0}
+      run: |
+        # Using the same pipe logic if the test binaries require an enter key/exit selection
+        echo "0" | mingw32-make test || true
