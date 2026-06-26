@@ -48,7 +48,8 @@ jobs:
       if: matrix.os == 'windows-latest'
       shell: msys2 {0}
       run: |
-        # Explicitly linking the  Makefile's unexpected cross-compiler variable name to standard mingw g++
+        # Explicitly create the build folder so the linker doesn't panic
+        mkdir -p build
         mingw32-make windows CXX_MINGW=g++
 
     - name: Verify Execution (Windows)
