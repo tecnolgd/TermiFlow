@@ -102,12 +102,20 @@ void cmdHandler() {
         }
         else if (command == "help") {
             std::cout << "\n\t-- Available commands --\n";
-            std::cout << "launch <app>                    : Launch an application\n";
+            std::cout << "launch <app>/<shortcut>         : Launch an application\n\n";
             std::cout << "shortcut <add/remove/list>      : Manage shortcuts\n";
+            std::cout << "    > shortcut add <app> <new_shortcut>    : Create a new shortcut called \"new_shortcut\" for the existing app \"app\"\n";
+            std::cout << "    > shortcut remove <shortcut>           : Remove the shortcut\n";
+            std::cout << "    > shortcut list                        : List all the existing shortcut-app mappings\n\n";
             std::cout << "tasks                           : View running tasks\n";
-            std::cout << "theme <light/dark>              : Change theme\n";
-            std::cout << "config                          : Config settings\n";
+            std::cout << "theme <light/dark>              : Change interface theme\n";
+            std::cout << "    > theme light                          : Shift interface to light mode\n";
+            std::cout << "    > theme dark                           : Shift interface to dark mode\n\n";
+            std::cout << "config                          : Config settings\n\n";
             std::cout << "history <clear/list/goto>       : Check History\n";
+            std::cout << "    > history clear                        : Clear existing command_handler history\n";
+            std::cout << "    > history list                         : List command history\n";
+            std::cout << "    > history goto <index>                 : Display command present at the given history index\n\n";
             std::cout << "stats                           : View system stats (CPU time,Memory usage, Uptime)\n";
             std::cout << "sm                              : Session manager\n";
             std::cout << "exit/quit                       : Exit\n";
