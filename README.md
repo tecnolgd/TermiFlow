@@ -225,6 +225,5 @@ If TermiFlow has positively impacted your workflow, consider:
 
 ## Author & Version
 
-- **Author:** tecnolgd  
-- **Version:** v0.2.1-beta  
+- **Author:** tecnolgd   
 - **License:** [MIT License](LICENSE.md)
