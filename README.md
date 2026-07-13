@@ -223,7 +223,7 @@ If TermiFlow has positively impacted your workflow, consider:
 - Sharing feedback and suggestions
 - [Contributing](CONTRIBUTING.md) code or documentation
 
-## Author & Version
+## Author & License
 
 - **Author:** tecnolgd   
 - **License:** [MIT License](LICENSE.md)
