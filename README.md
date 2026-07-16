@@ -1,18 +1,17 @@
 
 <div align = "center">
 
-<img src = "assets/termiflow_logo.png" alt = "TermiFlow logo">
+  <img src = "assets/termiflow_logo.png" alt = "TermiFlow logo">
 
-<a href = "LICENSE.md"><img src = "https://img.shields.io/github/license/tecnolgd/TermiFlow?style=flat" alt = "License(MIT)"></a>
-<a href = "https://github.com/tecnolgd/TermiFlow/issues"><img src = "https://img.shields.io/badge/issues-open-teal"></a>
-<a href="https://github.com/tecnolgd/TermiFlow/releases"><img src="https://img.shields.io/github/v/release/tecnolgd/TermiFlow?include_prereleases" alt="Release">
-</a>
-<a href="https://github.com/tecnolgd/TermiFlow/graphs/contributors"><img src="https://img.shields.io/github/contributors/tecnolgd/TermiFlow?style=flat&color=orange" alt="Contributors Badge">
-</a>
-<a href = "#documentation"><img src = "https://img.shields.io/badge/docs-available-blue" alt = "Docs"></a>
+  <a href = "LICENSE.md"><img src = "https://img.shields.io/github/license/tecnolgd/TermiFlow?style=flat" alt = "License(MIT)"></a>
+  <a href = "https://github.com/tecnolgd/TermiFlow/issues"><img src = "https://img.shields.io/badge/issues-open-teal"></a>
+  <a href="https://github.com/tecnolgd/TermiFlow/releases"><img src="https://img.shields.io/github/v/release/tecnolgd/TermiFlow?include_prereleases" alt="Release">
+  </a>
+  <a href="https://github.com/tecnolgd/TermiFlow/graphs/contributors"><img src="https://img.shields.io/github/contributors/tecnolgd/TermiFlow?style=flat&color=orange" alt="Contributors Badge">
+  </a>
+  <a href = "#documentation"><img src = "https://img.shields.io/badge/docs-available-blue" alt = "Docs"></a>
+
 </div>
-
-## What is TermiFlow?
 
 > **TermiFlow** is a command-driven terminal tool that lets users **launch applications, execute shortcuts, track command history**, and **much more** — all from a single, fast, keyboard-centric interface.
 
@@ -21,7 +20,7 @@ Think of it as:
 - a ***command hub***
 - a ***foundation for terminal automation***
 
-*No GUI. No fluff. Just flow.*
+*No GUI. No Alt-Tabbing. Only commands.*
 
 ## Sample GIF
 ![Termiflow GIF](assets/termiflow.GIF)
@@ -53,114 +52,118 @@ git clone https://github.com/tecnolgd/termiflow.git
 cd termiflow
 ```
 
-#### Using Makefile (Recommended)
+- **Using Makefile** (Recommended)
 
-**For Linux:**
-```bash
-make build        # or simply: make
-make run          # Build and run immediately
-make rebuild      # Clean and rebuild
-```
+  - **On Linux:**
+    ```bash
+    make build        # or simply: make
+    make run          # Build and run immediately
+    make rebuild      # Clean and rebuild
+    ```
 
-**For Windows (requires MinGW):**
-```bash
-mkdir build
-make windows
-```
+  - **On Windows (requires MinGW):**
+    ```bash
+    mkdir build
+    make windows
+    ```
 
-**Other useful targets:**
-```bash
-make help         # Show all available targets
-make clean        # Remove build artifacts
-make info         # Display build information
-```
----
-#### Manual Build (Without Makefile)
+  - **Other useful targets:**
+    ```bash
+    make help         # Show all available targets
+    make clean        # Remove build artifacts
+    make info         # Display build information
+    ```
 
-**On Linux:**
-```bash
-g++ src/main.cpp src/core/*.cpp src/features/*.cpp -o termiflow -I./include
-```
+-  **Manual Build** (Without Makefile)
 
-**On Windows (MinGW):**
-```bash
-x86_64-w64-mingw32-g++ src/main.cpp src/core/*.cpp src/features/*.cpp -o termiflow.exe -I./include -static -static-libgcc -static-libstdc++
-```
+  - **On Linux:**
+    ```bash
+    g++ src/main.cpp src/core/*.cpp src/features/*.cpp -o termiflow -I./include
+    ```
 
-## How to Run
+  - **On Windows (MinGW):**
+    ```bash
+    x86_64-w64-mingw32-g++ src/main.cpp src/core/*.cpp src/features/*.cpp -o termiflow.exe -I./include -static -static-libgcc -static-libstdc++
+    ```
+
+## Running the application
+
 After building, run the application:
 
 ```bash
-./build/termiflow    # for Linux
-
-./build/termiflow.exe   # for Windows
+./build/termiflow    # on Linux
+```
+```bash
+./build/termiflow.exe   # on Windows
 ```
 
 ## Features Overview
 
 | Feature | Description | Status |
 |---------|-------------|--------|
-| **Command Handler** | Central command parser and dispatcher | ✅ Implemented |
-| **Application Launcher** | Launch system applications directly | ✅ Implemented |
-| **Custom Shortcuts** | Define your own app launch shortcuts | ✅ Implemented (Currently for Windows apps) |
-| **Theme Manager** | Light/Dark terminal themes | ✅ Implemented |
-| **Command History** | Display previous commands | ✅ Implemented |
-| **System Stats** | Display CPU, Memory, Uptime info | ✅ Implemented (Windows & linux) |
-| **Configuration** | Auto-launch previously used theme as default theme | ✅ Implemented |
+| **Command Handler** | Central command parser and dispatcher | ✓ Implemented |
+| **Application Launcher** | Launch system applications directly | ✓ Implemented |
+| **Custom Shortcuts** | Define your own app launch shortcuts | ✓ Implemented (Currently for Windows apps) |
+| **Theme Manager** | Light/Dark terminal themes | ✓ Implemented |
+| **Command History** | Display previous commands | ✓ Implemented |
+| **System Stats** | Display CPU, Memory, Uptime info | ✓ Implemented (Windows & linux) |
+| **Configuration** | Auto-launch previously used theme as default theme | ✓ Implemented |
 
 
-## Features Implemented (Current)
+## Features Implemented (Current)         
 
-### Command Handler
-- Central command parser and dispatcher
-- Routes user input to appropriate modules
-- Neatly handles unknown commands
+-  **Command Handler**       
+    - Central command parser and dispatcher        
+    - Routes user input to appropriate modules
+    - Neatly handles unknown commands
 
-### Application Launcher
-- Launches system applications **directly** from the terminal
-- **Platform-aware** execution logic (Windows/Linux)
+- **Application Launcher**		
+	- Launches system applications **directly** from the terminal
+	- **Platform-aware** execution logic (Windows/Linux)
 
-### Custom Shortcuts
-- Users can define their **own** shortcuts  
-  Example:
-  ```bash
-  shortcuts add  chrome c
-  ```
-- (Note: Shortcuts are currently defined for Windows systems; Linux support comming soon!)
+- **Custom Shortcuts**
+	- Users can define their **own** shortcuts  
+  	Example:
+  	```bash
+  	shortcuts add  chrome c
+  	```
+	- (Note: Shortcuts are currently defined for Windows systems; Linux support comming soon!)
 
-### Terminal theme management
-- Provides *light* and *dark* theme for terminals
-- Switch themes with a single command
+- **Terminal theme management**
+	- Provides *light* and *dark* theme for terminals
+	- Switch themes with a single command
 
-### Command history 
-- Stores every command typed in command-line mode.
-- Displays commands up to the most recent command.
+- **Command history** 
+	- Stores every command typed in command-line mode.
+	- Displays commands up to the most recent command.
 
-### System stats view
-- Displays system stats like **CPU usage(N/A)**, **Memory usage** and **Uptime**
-- Currently works for windows systems.
+- **System stats view**
+	- Displays system stats like **CPU usage(N/A)**, **Memory usage** and **Uptime**
+	- Currently works for windows systems.
 
 ## Architecture & Design
 
 ### Separation of Concerns
+
 TermiFlow follows **clean architecture** principles with clear separation between:
 
-#### **Business Logic Layer**
-- **ApplicationService** - Core orchestration and business rules
-- **CommandHandler** - Command parsing and routing
-- Feature modules (Launch, History, Shortcuts, etc.)
+- **Business Logic Layer**
+	- **ApplicationService** - Core orchestration and business rules
+	- **CommandHandler** - Command parsing and routing
+	- Feature modules (Launch, History, Shortcuts, etc.)
 
-#### **UI Service Layer**
-- **UIService** - Centralized user interface and output handling
-- Handles all user prompts, messages, and display formatting
-- Isolated from business logic
+- **UI Service Layer**
+	- **UIService** - Centralized user interface and output handling
+	- Handles all user prompts, messages, and display formatting
+	- Isolated from business logic
 
-#### **Data/Configuration Layer**
-- **ConfigService** - Configuration file I/O and management
-- **Persistence** - History and settings storage
-- File operations decoupled from business logic
+- **Data/Configuration Layer**
+	- **ConfigService** - Configuration file I/O and management
+	- **Persistence** - History and settings storage
+	- File operations decoupled from business logic
 
-### How It Works
+### Working
+
 - TermiFlow is built around a **modular C++** core with **clean separation of concerns**.    
 - Each feature (launching, shortcuts, history, etc.) is implemented as a separate module, making it easy to extend and maintain.    
 - The command handler parses user input and dispatches it to the appropriate module.
@@ -169,18 +172,18 @@ TermiFlow follows **clean architecture** principles with clear separation betwee
 
 ## Troubleshooting
 
-**Application won't start:**
-- Ensure all dependencies (g++ compiler) are installed.
-- Check file permissions: `chmod +x ./build/main`.
-- Verify the build was successful.
+1. **Application won't start:**
+	- Ensure all dependencies (g++ compiler) are installed.
+	- Check file permissions: `chmod +x ./build/main`.
+	- Verify the build was successful.
 
-**Shortcuts not working:**
-- Verify shortcuts were saved correctly with `shortcuts list`.
-- Re-add shortcuts if needed: `shortcuts add [app] [shortcut]`.
+2. **Shortcuts not working:**
+	- Verify shortcuts were saved correctly with `shortcuts list`.
+	- Re-add shortcuts if needed: `shortcuts add [app] [shortcut]`.
 
-**System stats display:**
-- Currently optimized for Windows systems with slight linux support(unstable).
-- Cross-platform support coming soon.
+3. **System stats display:**
+	- Currently optimized for Windows systems with slight linux support(unstable).
+	- Cross-platform support coming soon.
 
 ## Documentation
 
@@ -190,9 +193,9 @@ TermiFlow follows **clean architecture** principles with clear separation betwee
 - [**Configuration**](assets/docs/config.md)
 - [**Roadmap**](assets/docs/roadmap.md)
 
-For more details, refer to:
-- **Code comments** in source files for implementation details
-- **Header files** in `include/` directory for function details
+> For more details, refer to:
+> - **Code comments** in source files for implementation details
+> - **Header files** in `include/` directory for function details
 
 ## License
 [MIT License](LICENSE.md)
