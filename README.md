@@ -3,13 +3,13 @@
 
   <img src = "assets/termiflow_logo.png" alt = "TermiFlow logo">
 
-  <a href = "LICENSE.md"><img src = "https://img.shields.io/github/license/tecnolgd/TermiFlow?style=flat" alt = "License(MIT)"></a>
-  <a href = "https://github.com/tecnolgd/TermiFlow/issues"><img src = "https://img.shields.io/badge/issues-open-teal"></a>
-  <a href="https://github.com/tecnolgd/TermiFlow/releases"><img src="https://img.shields.io/github/v/release/tecnolgd/TermiFlow?include_prereleases" alt="Release">
+  <a href = "LICENSE.md"><img src = "https://img.shields.io/github/license/tecnolgd/TermiFlow?color=1a1a1a&style=flat-square" alt = "License(MIT)"></a>
+  <a href = "https://github.com/tecnolgd/TermiFlow/issues"><img src = "https://img.shields.io/badge/issues-open-1a1a1a?style=flat-square"></a>
+  <a href="https://github.com/tecnolgd/TermiFlow/releases"><img src="https://img.shields.io/github/v/release/tecnolgd/TermiFlow?include_prereleases&color=1a1a1a&style=flat-square" alt="Release">
   </a>
-  <a href="https://github.com/tecnolgd/TermiFlow/graphs/contributors"><img src="https://img.shields.io/github/contributors/tecnolgd/TermiFlow?style=flat&color=orange" alt="Contributors Badge">
+  <a href="https://github.com/tecnolgd/TermiFlow/graphs/contributors"><img src="https://img.shields.io/github/contributors/tecnolgd/TermiFlow?color=1a1a1a&style=flat-square" alt="Contributors Badge">
   </a>
-  <a href = "#documentation"><img src = "https://img.shields.io/badge/docs-available-blue" alt = "Docs"></a>
+  <a href = "#documentation"><img src = "https://img.shields.io/badge/docs-available-1a1a1a?style=flat-square" alt = "Docs"></a>
 
 </div>
 
@@ -138,8 +138,9 @@ After building, run the application:
 	- Displays commands up to the most recent command.
 
 - **System stats view**
-	- Displays system stats like **CPU usage(N/A)**, **Memory usage** and **Uptime**
-	- Currently works for windows systems.
+	- Displays system stats like **CPU usage(N/A)**,
+  - **Memory usage** and **Uptime**    
+  - Currently works for windows systems.
 
 ## Architecture & Design
 
@@ -201,6 +202,7 @@ TermiFlow follows **clean architecture** principles with clear separation betwee
 [MIT License](LICENSE.md)
 
 ## Future Upgrades
+
 - **Cross-platform** support (Linux, macOS)
 - Plugin system for third-party modules
 - Enhanced system stats (CPU, network, etc.)    

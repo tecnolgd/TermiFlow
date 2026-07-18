@@ -33,135 +33,136 @@ TermiFlow follows a **three-layer service-oriented architecture**:
 
 ### 1. Entry Point: main.cpp
 
-**Responsibility:** Application bootstrap and error handling
+- **Responsibility:** Application bootstrap and error handling
 
-**Key Structure:**
-- Creates `ApplicationService` instance (dependency container)
-- Calls `app.initialize()` to set up configuration and theme
-- Calls `app.run()` to start the main application loop
-- Minimal code, delegates all logic to ApplicationService
+- **Key Structure:**
+    - Creates `ApplicationService` instance (dependency container)
+    - Calls `app.initialize()` to set up configuration and theme
+    - Calls `app.run()` to start the main application loop
+    - Minimal code, delegates all logic to ApplicationService
 
-**Current Flow:**
-```txt
-Application Start
-    ↓
-Create ApplicationService
-    ↓
-Initialize (load config, apply theme)
-    ↓
-Run main loop (orchestrated by ApplicationService)
-    ↓
-Exception handling and cleanup
-```
+- **Current Flow:**
+    ```txt
+    Application Start
+        ↓
+    Create ApplicationService
+        ↓
+    Initialize (load config, apply theme)
+        ↓
+    Run main loop (orchestrated by ApplicationService)
+        ↓
+    Exception handling and cleanup
+    ```
 
 ### 2. Core Services (Service Layer)
 
 #### A. ApplicationService (application_service.hpp/cpp)
 
-**Purpose:** Core business logic orchestration and application control flow
+- **Purpose:** Core business logic orchestration and application control flow
 
-**Responsibilities:**
-- Initialize application (load configuration, apply theme)
-- Orchestrate main event loop
-- Delegate feature requests to appropriate modules
-- Handle theme changes and configuration updates
-- Manage application state
+- **Responsibilities:**
+    - Initialize application (load configuration, apply theme)
+    - Orchestrate main event loop
+    - Delegate feature requests to appropriate modules
+    - Handle theme changes and configuration updates
+    - Manage application state
 
-**Key Methods:**
-- `initialize()` - Load config and apply auto-theme if enabled
-- `run()` - Main application loop with menu dispatch via switch statement
-- `shouldApplyAutoTheme()` - Check auto-theme setting
-- `getCurrentTheme()` - Get current theme preference
-- `handleThemeChange()` - Coordinate theme change between services
+- **Key Methods:**
+    - `initialize()` - Load config and apply auto-theme if enabled
+    - `run()` - Main application loop with menu dispatch via switch statement
+    - `shouldApplyAutoTheme()` - Check auto-theme setting
+    - `getCurrentTheme()` - Get current theme preference
+    - `handleThemeChange()` - Coordinate theme change between services
 
-**Dependencies:**
-- `ConfigService` - For configuration management
-- `UIService` - For user interaction
-- Feature modules (Launch, Shortcuts, History, etc.)
+- **Dependencies:**
+    - `ConfigService` - For configuration management
+    - `UIService` - For user interaction
+    - Feature modules (Launch, Shortcuts, History, etc.)
 
-**Architecture Pattern:** Dependency injection and facade pattern
+    **Architecture Pattern:** Dependency injection and facade pattern
 
 #### B. UIService (ui_service.hpp/cpp)
 
-**Purpose:** Centralize all user interface and presentation logic
+- **Purpose:** Centralize all user interface and presentation logic
 
-**Responsibilities:**
-- Display menus and prompts to user
-- Collect and validate user input
-- Format and display messages, errors, and success notifications
-- Isolate all I/O operations from business logic
+- **Responsibilities:**
+    - Display menus and prompts to user
+    - Collect and validate user input
+    - Format and display messages, errors, and success notifications
+    - Isolate all I/O operations from business logic
 
-**Key Methods:**
-- `displayMainMenu()` - Show main menu
-- `getMenuChoice()` - Get and validate menu selection (0-9)
-- `getThemeInput()` - Prompt for theme selection
-- `displayMessage(message)` - Display generic message
-- `displayError(error)` - Display error message
-- `displaySuccess(message)` - Display success message
-- `getUserInput(prompt)` - Get generic user input
+- **Key Methods:**
+    - `displayMainMenu()` - Show main menu
+    - `getMenuChoice()` - Get and validate menu selection (0-9)
+    - `getThemeInput()` - Prompt for theme selection
+    - `displayMessage(message)` - Display generic message
+    - `displayError(error)` - Display error message
+    - `displaySuccess(message)` - Display success message
+    - `getUserInput(prompt)` - Get generic user input
 
-**Key Features:**
-- Input validation (ensures numeric choices are digits 0-9)
-- Consistent message formatting
-- Centralized output - all presentation goes through this service
-- Enables easy testing (can be mocked or replaced)
+- **Key Features:**
+    - Input validation (ensures numeric choices are digits 0-9)
+    - Consistent message formatting
+    - Centralized output - all presentation goes through this service
+    - Enables easy testing (can be mocked or replaced)
 
 #### C. ConfigService (config_service.hpp/cpp)
 
-**Purpose:** Manage all configuration file I/O and data access
+- **Purpose:** Manage all configuration file I/O and data access
 
-**Responsibilities:**
-- Load configuration from `config/termiflow.conf`
-- Parse INI-like config file format
-- Store configuration in memory (unordered_map)
-- Save configuration changes to file
-- Provide get/set interface for config values
+- **Responsibilities:**
+    - Load configuration from `config/termiflow.conf`
+    - Parse INI-like config file format
+    - Store configuration in memory (unordered_map)
+    - Save configuration changes to file
+    - Provide get/set interface for config values
 
-**Key Methods:**
-- `loadConfig()` - Read and parse config file
-- `saveConfig()` - Write configuration back to file
-- `getValue(key, defaultValue)` - Retrieve config value
-- `setValue(key, value)` - Update config value
-- `getConfig()` - Get entire configuration object
+- **Key Methods:**
+    - `loadConfig()` - Read and parse config file
+    - `saveConfig()` - Write configuration back to file
+    - `getValue(key, defaultValue)` - Retrieve config value
+    - `setValue(key, value)` - Update config value
+    - `getConfig()` - Get entire configuration object
 
-**Data Structure:**
-```cpp
-struct Config {
-    std::unordered_map<std::string, std::string> values;
-};
-```
+- **Data Structure:**
+    ```cpp
+    struct Config {
+        std::unordered_map<std::string, std::string> values;
+    };
+    ```
 
-**Config Keys:**
-- `user_interface.theme` - Current theme (light/dark)
-- `user_interface.show_banner` - Show banner on startup
-- `behavior.auto_apply_theme` - Auto-apply theme on startup
+- **Config Keys:**
+    - `user_interface.theme` - Current theme (light/dark)
+    - `user_interface.show_banner` - Show banner on startup
+    - `behavior.auto_apply_theme` - Auto-apply theme on startup
 
-**File Format:**
-```ini
-[user_interface]
-theme=dark
-show_banner=true
+- **File Format:**
+    ```ini
+    [user_interface]
+    theme=dark
+    show_banner=true
 
-[behavior]
-auto_apply_theme=true
-```
+    [behavior]
+    auto_apply_theme=true
+    ```
 > For more details, check [TermiFlow Config Docs](config.md#termiflow-configuration-file-termiflowconf)
 
 ### 3. Feature Modules
 
 #### A. Theme Manager (theme_manager.hpp/cpp)
 
-**Purpose:** Apply and manage terminal color themes
+- **Purpose:** Apply and manage terminal color themes
 
-**Key Functions:**
-- `changeTheme(std::string theme)` - Apply named theme to terminal
-- `changeTheme()` - Interactive theme selection (deprecated, use UIService)
+- **Key Functions:**
+    - `changeTheme(std::string theme)` - Apply named theme to terminal
+    - `changeTheme()` - Interactive theme selection (deprecated, use UIService)
 
-**Supported Themes:** Light, Dark (platform-dependent ANSI codes)
+- **Supported Themes:** Light, Dark (platform-dependent ANSI codes)
 
-**Implementation:** Uses ANSI escape sequences for terminal color control
+- **Implementation:** Uses ANSI escape sequences for terminal color control
 
-> **Note:** In the new SOC architecture:     
+> [!NOTE]      
+> In the new SOC architecture:     
 > - Theme application logic is isolated in this module
 > - Theme persistence is handled by `ConfigService`
 > - Theme UI interaction is delegated to `UIService`
@@ -169,197 +170,198 @@ auto_apply_theme=true
 
 #### B. Launcher (launch.hpp/cpp)
 
-**Purpose:** Execute/launch system applications
+- **Purpose:** Execute/launch system applications
 
-**Key Functions:**
-- `launchApp()` - Interactive app selection and launching
-- `launchApp(std::string appName)` - Direct app launch by name
+- **Key Functions:**
+    - `launchApp()` - Interactive app selection and launching
+    - `launchApp(std::string appName)` - Direct app launch by name
 
-**Functionality:**
-- Presents list of available applications to user
-- User selects application to launch
-- Executes application via system/platform-specific calls
+- **Functionality:**
+    - Presents list of available applications to user
+    - User selects application to launch
+    - Executes application via system/platform-specific calls
 
-**Platform Support:**
-- Linux: Uses `execvp()` or similar system call
-- Windows: Uses `CreateProcess()` or `system()` call
+- **Platform Support:**
+    - Linux: Uses `execvp()` or similar system call
+    - Windows: Uses `CreateProcess()` or `system()` call
 
-**Integration:** Called by `ApplicationService` on menu option '1'
+- **Integration:** Called by `ApplicationService` on menu option '1'
 
 #### C. Shortcuts (shortcuts.hpp/cpp)
 
-**Purpose:** Define and manage custom command shortcuts
+- **Purpose:** Define and manage custom command shortcuts
 
-**Architecture:** Class-based with in-memory state management
+- **Architecture:** Class-based with in-memory state management
 
-```cpp
-class shortcuts {
-    // Storage
-    std::unordered_map<std::string, std::string> shortMap;
-    std::string filepath;
-    
-    // Methods
-    void add(const std::string& key, const std::string& value);
-    void remove(const std::string& key);
-    void save();
-    void list();
-    void load();
-    bool exists(const std::string& value);
-    std::string getValue(const std::string& key);
-};
-```
+    ```cpp
+    class shortcuts {
+        // Storage
+        std::unordered_map<std::string, std::string> shortMap;
+        std::string filepath;
+        
+        // Methods
+        void add(const std::string& key, const std::string& value);
+        void remove(const std::string& key);
+        void save();
+        void list();
+        void load();
+        bool exists(const std::string& value);
+        std::string getValue(const std::string& key);
+    };
+    ```
 
-**Key Features:**
-- In-memory HashMap for O(1) lookup
-- File persistence (unknown format)
-- Add/remove/list/search operations
-- Interactive mode (`shortcutInteractive()`)
+- **Key Features:**
+    - In-memory HashMap for O(1) lookup
+    - File persistence (unknown format)
+    - Add/remove/list/search operations
+    - Interactive mode (`shortcutInteractive()`)
 
-**Integration:** Called by `ApplicationService` on menu option '2'
+- **Integration:** Called by `ApplicationService` on menu option '2'
 
 #### D. History (history.hpp/cpp)
 
-**Purpose:** Track and display command history
+- **Purpose:** Track and display command history
 
-**Architecture:** Class-based with vector storage
+- **Architecture:** Class-based with vector storage
 
-```cpp
-class history {
-    std::string filePath;
-    std::vector<std::string> cmdEntries;
-    
-    void load();
-    void save();
-    void add(const std::string& cmd);
-    void list();
-    std::string get(int index);
-    void historyClear();
-};
-```
+    ```cpp
+    class history {
+        std::string filePath;
+        std::vector<std::string> cmdEntries;
+        
+        void load();
+        void save();
+        void add(const std::string& cmd);
+        void list();
+        std::string get(int index);
+        void historyClear();
+    };
+    ```
 
-**Key Features:**
-- In-memory vector storage (ordered)
-- File persistence
-- Add/list/clear/index operations
-- Interactive mode (`historyInteractive()`)
+- **Key Features:**
+    - In-memory vector storage (ordered)
+    - File persistence
+    - Add/list/clear/index operations
+    - Interactive mode (`historyInteractive()`)
 
-**Integration:** Called by `ApplicationService` on menu option '6'
+- **Integration:** Called by `ApplicationService` on menu option '6'
 
 #### E. Session Manager (session_manager.hpp/cpp)
 
-**Purpose:** Manage sessions and running tasks
+- **Purpose:** Manage sessions and running tasks
 
-**Status:** Planned for future implementation
+- **Status:** Planned for future implementation
 
-**Integration:** Called by `ApplicationService` on menu option '3'
+- **Integration:** Called by `ApplicationService` on menu option '3'
 
 #### F. System Stats (system_stats.hpp/cpp)
 
-**Purpose:** Display system information and statistics
+- **Purpose:** Display system information and statistics
 
-**Status:** Partially implemented
+- **Status:** Partially implemented
 
-**Key Functions:**
-- `statsInteractive()` - Display system statistics
+- **Key Functions:**
+    - `statsInteractive()` - Display system statistics
 
-**Integration:** Called by `ApplicationService` on menu option '7'
+- **Integration:** Called by `ApplicationService` on menu option '7'
 
 #### G. Command Handler (command_handler.hpp/cpp)
 
-**Purpose:** Provide an interactive command-line interface as an alternative to the menu-driven UI
+- **Purpose:** Provide an interactive command-line interface as an alternative to the menu-driven UI
 
-**Responsibilities:**
-- Parse user command input from standard input
-- Tokenize commands into arguments
-- Route commands to appropriate feature modules
-- Support command shortcuts for quick access
-- Maintain command history
-- Provide help and usage information
+- **Responsibilities:**
+    - Parse user command input from standard input
+    - Tokenize commands into arguments
+    - Route commands to appropriate feature modules
+    - Support command shortcuts for quick access
+    - Maintain command history
+    - Provide help and usage information
 
-**Key Function:**
-- `cmdHandler()` - Main interactive command loop
+- **Key Function:**
+    - `cmdHandler()` - Main interactive command loop
 
-**Supported Commands:**
+- **Supported Commands:**
 
-1. **launch** - Execute applications
-   ```bash
-   launch <app>           // Launch app directly
-   launch <shortcut>      // Launch app via shortcut
-   
-   Examples:
-   launch chrome          // Launch Chrome directly
-   launch c               // Launch Chrome via 'c' shortcut
-   ```
+    1. **launch** - Execute applications
+        ```bash
+        launch <app>           // Launch app directly
+        launch <shortcut>      // Launch app via shortcut
+        
+        Examples:
+        launch chrome          // Launch Chrome directly
+        launch c               // Launch Chrome via 'c' shortcut
+        ```
 
-2. **theme** - Change terminal theme
-   ```bash
-   theme <light|dark>     // Apply theme
-   
-   Example:
-   theme dark             // Apply dark theme
-   ```
+    2. **theme** - Change terminal theme
+        ```bash
+        theme <light|dark>     // Apply theme
+        
+        Example:
+        theme dark             // Apply dark theme
+        ```
 
-3. **shortcut** - Manage command shortcuts
-   ```
-   shortcut add <app> <key>      // Add shortcut (e.g., shortcut add chrome c)
-   shortcut remove <key>          // Remove shortcut (e.g., shortcut remove c)
-   shortcut list                  // List all shortcuts
-   ```
+    3. **shortcut** - Manage command shortcuts
+        ```
+        shortcut add <app> <key>      // Add shortcut (e.g., shortcut add chrome c)
+        shortcut remove <key>          // Remove shortcut (e.g., shortcut remove c)
+        shortcut list                  // List all shortcuts
+        ```
 
-4. **history** - Manage command history
-   ```bash
-   history list                   // Display all commands
-   history clear                  // Clear history
-   history goto <index>           // Display the command at the given history index
-   
-   Examples:
-   history list                   // Show all commands
-   history goto 1                 // Display the first command
-   ```
+    4. **history** - Manage command history
+        ```bash
+        history list                   // Display all commands
+        history clear                  // Clear history
+        history goto <index>           // Display the command at the given history index
+        
+        Examples:
+        history list                   // Show all commands
+        history goto 1                 // Display the first command
+        ```
 
-5. **stats** - Display system statistics
-   ```bash
-   stats                          // Show system information
-   ```
+    5. **stats** - Display system statistics
+        ```bash
+        stats                          // Show system information
+        ```
 
-**Architecture Pattern:**
-- String tokenization via `std::stringstream`
-- Command dispatch via string matching and if-else chain
-- Integration with all core feature modules (Launch, Theme, Shortcuts, History, Stats)
+- **Architecture Pattern:**
+    - String tokenization via `std::stringstream`
+    - Command dispatch via string matching and if-else chain
+    - Integration with all core feature modules (Launch, Theme, Shortcuts, History, Stats)
 
-**Data Flow:**
-```
-User input (e.g., "launch chrome")
-    ↓
-Parse & tokenize via std::stringstream
-    ↓
-Extract command token (e.g., "launch")
-    ↓
-Match against known commands
-    ↓
-Extract arguments (e.g., ["chrome"])
-    ↓
-Call appropriate feature function
-    ├─ Launch module: launchApp(tokens[1])
-    ├─ Theme module: changeTheme(tokens[1])
-    ├─ Shortcuts module: s.add/remove/list()
-    ├─ History module: h.add/list/goto()
-    └─ Stats module: statsInteractive()
-    ↓
-Add command to history
-    ↓
-Return to command prompt
-```
+- **Data Flow:**
+    ```
+    User input (e.g., "launch chrome")
+        ↓
+    Parse & tokenize via std::stringstream
+        ↓
+    Extract command token (e.g., "launch")
+        ↓
+    Match against known commands
+        ↓
+    Extract arguments (e.g., ["chrome"])
+        ↓
+    Call appropriate feature function
+        ├─ Launch module: launchApp(tokens[1])
+        ├─ Theme module: changeTheme(tokens[1])
+        ├─ Shortcuts module: s.add/remove/list()
+        ├─ History module: h.add/list/goto()
+        └─ Stats module: statsInteractive()
+        ↓
+    Add command to history
+        ↓
+    Return to command prompt
+    ```
 
-**Error Handling:**
-- Validates argument count for each command
-- Provides usage information on invalid syntax
-- Continues loop on error without crashing
-- Supports exception handling for operations like history index access
+- **Error Handling:**
+    - Validates argument count for each command
+    - Provides usage information on invalid syntax
+    - Continues loop on error without crashing
+    - Supports exception handling for operations like history index access
 
-**Integration:** Called by `ApplicationService` on menu option '9'
+- **Integration:** Called by `ApplicationService` on menu option '9'
 
-**Note:** The command handler provides a powerful alternative interface for power users and scripting. It complements the menu-driven interface and enables keyboard-driven workflows without navigating menus.
+> [!TIP]       
+> The command handler provides a powerful alternative interface for power users and scripting. It complements the menu-driven interface and enables keyboard-driven workflows without navigating menus.
 
 ## Data Flow Diagrams
 
@@ -488,73 +490,73 @@ TermiFlow stores data in plain text files for easy inspection and portability.
 
 ### Shortcuts File (assets/textfiles/shortcut_det.txt)
 
-**Format:** Key-value pairs, one per line
-```
-shortcut_name=command_name
-```
+- **Format:** Key-value pairs, one per line
+    ```txt
+    shortcut_name=command_name
+    ```
 
-**Rules:**
-- Separator: = (no spaces around it)
-- Shortcut names must not contain = character
-- Each line is a separate shortcut
-- Example: c=chrome, v=code, s=stats
+- **Rules:**
+    - Separator: = (no spaces around it)
+    - Shortcut names must not contain = character
+    - Each line is a separate shortcut
+    - Example: c=chrome, v=code, s=stats
 
-**Guidelines:**
-- DO: Add new lines with format shortcut=command
-- DON'T: Use = in shortcut names
-- DON'T: Leave spaces around the = sign
+- **Guidelines:**
+    - DO: Add new lines with format shortcut=command
+    - DON'T: Use = in shortcut names
+    - DON'T: Leave spaces around the = sign
 
 ### History File (assets/textfiles/history.txt)
 
-**Format:** One command per line, in chronological order
-```
-command_1
-command_2
-command_3
-    .
-    .
-    .
-command_n
-```
+- **Format:** One command per line, in chronological order
+    ```
+    command_1
+    command_2
+    command_3
+        .
+        .
+        .
+    command_n
+    ```
 
-**Rules:**
-- Each executed command is recorded on a new line
-- Oldest commands first, newest last
-- No special formatting required
+- **Rules:**
+    - Each executed command is recorded on a new line
+    - Oldest commands first, newest last
+    - No special formatting required
 
-**Guidelines:**
-- DO: Let TermiFlow automatically manage this file
-- DON'T: Avoid manual editing (breaks historical accuracy)
-- WARNING: If editing manually, preserve chronological order
+- **Guidelines:**
+    - DO: Let TermiFlow automatically manage this file
+    - DON'T: Avoid manual editing (breaks historical accuracy)
+    - WARNING: If editing manually, preserve chronological order
 
 ### Configuration File (config/termiflow.conf)
 
-**Format:** INI-like sections with key-value pairs
-```ini
-[user_interface]
-theme=dark
-show_banner=true
+- **Format:** INI-like sections with key-value pairs
+    ```ini
+    [user_interface]
+    theme=dark
+    show_banner=true
 
-[behavior]
-auto_apply_theme=true
-```
+    [behavior]
+    auto_apply_theme=true
+    ```
 
-**Supported Keys:**
-- [user_interface]
-  - theme: light or dark (default: dark)
-  - show_banner: true or false (default: true)
-- [behavior]
-  - auto_apply_theme: true or false (default: false)
+- **Supported Keys:**
+    - [user_interface]
+    - theme: light or dark (default: dark)
+    - show_banner: true or false (default: true)
+    - [behavior]
+    - auto_apply_theme: true or false (default: false)
 
-**Data Validation:**
-- Invalid lines are skipped silently during parsing
-- Files are loaded on startup and saved when changes are made
-- Missing files are created automatically with defaults
+- **Data Validation:**
+    - Invalid lines are skipped silently during parsing
+    - Files are loaded on startup and saved when changes are made
+    - Missing files are created automatically with defaults
 
 ## Known Issues & Improvements
 
-For a comprehensive list of known limitations, ongoing issues, and opportunities to contribute, please refer to the [GitHub Issues](https://github.com/tecnolgd/TermiFlow/issues) tab.    
-Each issue is categorized and tracked for priority and difficulty level.
+- For a comprehensive list of known limitations, ongoing issues, and opportunities to contribute, please refer to the [GitHub Issues](https://github.com/tecnolgd/TermiFlow/issues) tab.    
+- Each issue is categorized and tracked for priority and difficulty level.
 
 ## Conclusion
 
