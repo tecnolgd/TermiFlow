@@ -1,7 +1,7 @@
 <!--Roadmap.md-->
 ## Roadmap & Future Upgrades
 
-- ✅ **Current:** 
+- ✓ **Current:** 
   - C++ core with modular architecture    
   - Currently Windows-optimized. Linux/macOS support coming soon.
   - **Makefile** added for modular build and run.
@@ -16,11 +16,11 @@
   - Consistent error handling across core and feature modules using modern C++ exception handling
   - Config Documentation 
 
-- 🔄 **In Progress:** 
+- ◴ **In Progress:** 
   - Implemetation of Arch. diagrams and docs 
   - Logging improvements
 
-- 📋 **Planned:**
+- ◌ **Planned:**
   - Cross-platform support (Linux, macOS)
   - Plugin system for third-party modules
   - Enhanced system stats (CPU, network, etc.)
