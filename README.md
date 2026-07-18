@@ -138,8 +138,7 @@ After building, run the application:
 	- Displays commands up to the most recent command.
 
 - **System stats view**
-	- Displays system stats like **CPU usage(N/A)**,
-  - **Memory usage** and **Uptime**    
+	- Displays system stats like **CPU usage(N/A)**, **Memory usage** and **Uptime**    
   - Currently works for windows systems.
 
 ## Architecture & Design
