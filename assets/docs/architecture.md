@@ -161,7 +161,7 @@ TermiFlow follows a **three-layer service-oriented architecture**:
 
 - **Implementation:** Uses ANSI escape sequences for terminal color control
 
-> [!IMPORTANT]      
+> [!NOTE]      
 > In the new SOC architecture:     
 > - Theme application logic is isolated in this module
 > - Theme persistence is handled by `ConfigService`
