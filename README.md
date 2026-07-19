@@ -49,7 +49,7 @@ It’s designed for:
 git clone https://github.com/tecnolgd/TermiFlow.git
 ```
 ```bash
-cd termiflow
+cd TermiFlow
 ```
 
 - **Using Makefile** (Recommended)
