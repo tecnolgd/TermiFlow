@@ -46,7 +46,7 @@ It’s designed for:
 
 ### Build Instructions
 ```bash
-git clone https://github.com/tecnolgd/termiflow.git
+git clone https://github.com/tecnolgd/TermiFlow.git
 ```
 ```bash
 cd termiflow
