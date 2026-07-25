@@ -22,8 +22,6 @@ Think of it as:
 
 *No GUI. No Alt-Tabbing. Only commands.*
 
-## Sample GIF
-![Termiflow GIF](assets/termiflow.GIF)
 
 ## Why TermiFlow?
 
