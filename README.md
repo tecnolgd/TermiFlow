@@ -22,8 +22,24 @@ Think of it as:
 
 *No GUI. No Alt-Tabbing. Only commands.*
 
-## Sample GIF
-![Termiflow GIF](assets/termiflow.GIF)
+
+## Sample Menu
+
+```txt
+        --- TermiFlow (beta) ---
+1. Launch an application
+2. Manage shortcuts
+3. View running tasks (unavailable)
+4. Change theme
+5. Config settings (unavailable)
+6. Check History
+7. View system stats
+8. Session manager (unavailable)
+9. Command Handler
+0. Exit
+Enter your choice:
+```
+
 
 ## Why TermiFlow?
 
