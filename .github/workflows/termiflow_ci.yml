@@ -24,22 +24,26 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y build-essential g++ make
-
+    - name: Show Linux CPU count
+      if: matrix.os == 'ubuntu-latest'
+      run: echo "NPROC=$(nproc)"
     - name: Compile Application (Linux)
       if: matrix.os == 'ubuntu-latest'
-      run: make linux
+      run: make linux -j$(nproc)
 
     - name: Run Tests (Linux)
       if: matrix.os == 'ubuntu-latest'
-      run: make test
+      run: make test -j$(nproc)
 
     # Windows-specific setup and build
     - name: Setup MinGW Toolchain (Windows)
       if: matrix.os == 'windows-latest'
+      shell: msys2 {0}
+      run: echo "NUMBER_OF_PROCESSORS=$NUMBER_OF_PROCESSORS"
       uses: msys2/setup-msys2@v2
       with:
         msystem: MINGW64
-        update: true
+        update: false
         install: >-
           mingw-w64-x86_64-gcc
           mingw-w64-x86_64-make
@@ -50,11 +54,11 @@ jobs:
       shell: msys2 {0}
       run: |
         mkdir -p build
-        mingw32-make windows CXX_MINGW=g++
+        mingw32-make windows -j"$NUMBER_OF_PROCESSORS" CXX_MINGW=g++
 
     - name: Run Tests (Windows)
       if: matrix.os == 'windows-latest'
       shell: msys2 {0}
       run: |
         # Using the same pipe logic if the test binaries require an enter key/exit selection
-        echo "0" | mingw32-make test || true
+        echo "0" | mingw32-make test -j"$NUMBER_OF_PROCESSORS" || true
