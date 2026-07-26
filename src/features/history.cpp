@@ -21,6 +21,11 @@ void history::load() {
 
 void history::save() {
     std::ofstream outfile("assets/textfiles/history.txt");
+
+    if(! outfile.is_open()){
+        std::cerr <<"Warning: Could not open history file for writing\n";
+        return ;
+    }
     for(auto& e : cmdEntries) { //for each loop
         outfile << e << "\n";
     }

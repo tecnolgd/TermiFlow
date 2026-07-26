@@ -27,6 +27,7 @@ void launchApp(std::string appName) {
     std::string command;
     
 #ifdef _WIN32
+    // Windows commands
     if (appName == "chrome") {
         command = "start chrome";
     }
