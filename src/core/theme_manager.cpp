@@ -17,6 +17,8 @@ static bool getTerminalSize(int& rows, int& cols) {
     return true;
 }
 
+
+//handles apply theme operation for linux
 static void applyAnsiTheme(const std::string& colorCode) {
     std::cout << colorCode;
 
@@ -71,4 +73,3 @@ void changeTheme(std::string theme) {
         }
     #endif
 }
-
