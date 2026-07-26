@@ -38,8 +38,6 @@ jobs:
     # Windows-specific setup and build
     - name: Setup MinGW Toolchain (Windows)
       if: matrix.os == 'windows-latest'
-      shell: msys2 {0}
-      run: echo "NUMBER_OF_PROCESSORS=$NUMBER_OF_PROCESSORS"
       uses: msys2/setup-msys2@v2
       with:
         msystem: MINGW64
@@ -47,6 +45,11 @@ jobs:
         install: >-
           mingw-w64-x86_64-gcc
           mingw-w64-x86_64-make
+
+    - name: Show Windows processor count
+      if: matrix.os == 'windows-latest'
+      shell: msys2 {0}
+      run: echo "NUMBER_OF_PROCESSORS=$NUMBER_OF_PROCESSORS"
 
     # Windows compilation and testing
     - name: Compile Application (Windows)
