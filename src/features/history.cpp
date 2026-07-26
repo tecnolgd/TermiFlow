@@ -17,19 +17,18 @@ void history::load() {
     while(std::getline(infile, line)) {
         cmdEntries.push_back(line);
     }
-    infile.close();
 }
 
 void history::save() {
     std::ofstream outfile("assets/textfiles/history.txt");
 
     if(! outfile.is_open()){
-        return;
+        std::cerr <<"Warning: Could not open history file for writing\n";
+        return ;
     }
     for(auto& e : cmdEntries) { //for each loop
         outfile << e << "\n";
     }
-    outfile.close();
 }
 
 history::history(){

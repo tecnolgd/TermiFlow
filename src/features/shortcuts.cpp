@@ -70,7 +70,6 @@ void shortcuts::save(){
     for(auto& p : shortMap) { //for each loop
         outfile << p.first << "=" << p.second << "\n";
     }
-    outfile.close();
 }
 
 void shortcuts::list(){
@@ -95,7 +94,6 @@ void shortcuts::load() {
             shortMap[key] = value;
         }
     }
-    infile.close();
 }
 
 // Constructor: load shortcuts from file
