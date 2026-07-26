@@ -63,9 +63,14 @@ void shortcuts::remove(const std::string& shortcut){
 
 void shortcuts::save(){
     std::ofstream outfile("assets/textfiles/shortcut_det.txt");
+
+    if(! outfile.is_open()){
+        return;
+    }
     for(auto& p : shortMap) { //for each loop
         outfile << p.first << "=" << p.second << "\n";
     }
+    outfile.close();
 }
 
 void shortcuts::list(){
@@ -78,7 +83,7 @@ void shortcuts::list(){
 void shortcuts::load() {
     shortMap.clear();
     std::ifstream infile("assets/textfiles/shortcut_det.txt");
-    if(!infile.is_open()) {
+    if(! infile.is_open()) {
         return;  // File doesn't exist yet, that's okay
     }
     std::string line;
@@ -90,6 +95,7 @@ void shortcuts::load() {
             shortMap[key] = value;
         }
     }
+    infile.close();
 }
 
 // Constructor: load shortcuts from file
