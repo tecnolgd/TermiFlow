@@ -15,6 +15,7 @@
   - Unit testing suite
   - Consistent error handling across core and feature modules using modern C++ exception handling
   - Config Documentation 
+  - Parallel builds in CI for reduced build time
 
 - ◴ **In Progress:** 
   - Implemetation of Arch. diagrams and docs 
