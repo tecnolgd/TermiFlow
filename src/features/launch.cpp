@@ -12,14 +12,22 @@ void launchApp() {
     std::string appName;
     std::cout << "Enter App to be launched: ";
     std::getline(std::cin, appName);
-    if (s.exists(appName)) { //checks for shortcut if used e.g., 'launch c'
-        std::string app = s.getValue(appName);
-        std::cout << "Launching " << app << "...\n";
-        launchApp(app);
+
+    try{
+
+        if (s.exists(appName)) { //checks for shortcut if used e.g., 'launch c'
+            std::string app = s.getValue(appName);
+            std::cout << "Launching " << app << "...\n";
+            launchApp(app);
+        }
+        else {
+            std::cout << "Launching " << appName << "...\n";
+            launchApp(appName);
+        }
     }
-    else {
-        std::cout << "Launching " << appName << "...\n";
-        launchApp(appName);
+    catch (const std::exception& e){
+        std::cerr << e.what() << "\n";
+        return;
     }
 }
 
