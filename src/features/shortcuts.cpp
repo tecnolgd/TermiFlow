@@ -2,9 +2,32 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
+#include <cctype>
 #include "../../include/shortcuts.hpp"
 
+static bool isValidShortcutName(const std::string& shortcut) {
+    if (shortcut.empty()) {
+        return false;
+    }
+    for (char c : shortcut) {
+        if (!std::isalnum(static_cast<unsigned char>(c)) && c != '_' && c != '-') {
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool isAllowedLaunchApp(const std::string& app) {
+    return app == "chrome" || app == "code" || app == "notepad" || app == "youtube";
+}
+
 void shortcuts::add(const std::string& shortcut, const std::string& app){
+    if (!isValidShortcutName(shortcut)) {
+        throw std::runtime_error("Invalid shortcut name: " + shortcut);
+    }
+    if (!isAllowedLaunchApp(app)) {
+        throw std::runtime_error("Invalid launch app: " + app);
+    }
     shortMap[shortcut] = app; //store shortMap[shortcut] = app
     save();
 }
