@@ -33,11 +33,17 @@ void cmdHandler() {
         std::string command = tokens[0];
 
         if (command == "launch") {
+
             if (tokens.size() == 2 && s.exists(tokens[1])) { //checks for shortcut if used e.g., 'launch c'
                 std::string app = s.getValue(tokens[1]);
                 launchApp(app);
             } else if (tokens.size() == 2) { //for no shortcuts, i.e., if default 'launch chrome'
-                launchApp(tokens[1]);
+                try{
+                    launchApp(tokens[1]);
+                }
+                catch(const std::exception& e){
+                    std::cerr << e.what() << "\n";
+                }
             } else {
                 std::cout << "Usage: launch <app> or launch <shortcut>" << std::endl;
             }
@@ -53,7 +59,13 @@ void cmdHandler() {
             if (tokens.size() >= 2) {
                 std::string subcmd = tokens[1];
                 if (subcmd == "add" && tokens.size() == 4) {   //e.g., shortcut(0) add(1) chrome(2) c(3), token size=4.
-                    s.add(tokens[3], tokens[2]);   //'ch' and 'chrome' are passed as parameters
+
+                    try{
+                        s.add(tokens[3], tokens[2]);   //'ch' and 'chrome' are passed as parameters
+                    }
+                    catch(const std::exception& e){
+                        std::cerr << e.what() <<"\n";
+                    }
                 } else if (subcmd == "remove" && tokens.size() == 3) {
                     s.remove(tokens[2]);    //remove 'c' from list of shortcuts mapped to 'chrome' 
                 } else if (subcmd == "list") {
