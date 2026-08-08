@@ -39,7 +39,7 @@ char UIService::getMenuChoice() {
 
 std::string UIService::getThemeInput() {
     std::string theme;
-    std::cout << "Enter theme (dark / light): ";
+    std::cout << "Enter theme (e.g., light, dark, hacker): ";
     std::cin >> theme;
     return theme;
 }
