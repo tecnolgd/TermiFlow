@@ -72,7 +72,11 @@ void shortcuts::remove(){
     std::cout<<"Enter shortcut to be removed: ";
     std::cin>>appShortcut;
     std::cin.ignore(); // Clear the input buffer
-    remove(appShortcut);
+    try {
+        remove(appShortcut);
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << "\n";
+    }
 }
 
 void shortcuts::remove(const std::string& shortcut){
