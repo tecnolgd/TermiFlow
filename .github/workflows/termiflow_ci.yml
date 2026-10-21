@@ -3,11 +3,60 @@
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  pull_request_target:
+    types: [ "opened", "synchronize" ]
 
 jobs:
+  # Assignment check runs first
+  check-assignment:
+  runs-on: ubuntu-latest
+  permissions:
+    pull-requests: write
+    issues: write
+
+  steps:
+    - name: Check if PR is from owner
+      if: github.actor == github.repository_owner
+      run: echo "PR opened by repository owner. Skipping check."
+
+    - name: Check Issue Assignment
+      if: github.actor != github.repository_owner
+      uses: actions/github-script@v7
+      with:
+        script: |
+           const pr = context.payload.pull_request;
+           const author = pr.user.login;
+              
+          const body = pr.body || "";
+          const match = body.match(/#(\d+)/);
+              
+          if (!match) {
+            console.log("No linked issue found.");
+            await failPR(`Hello @${author}! Please link a referenced issue (e.g., 'Fixes #81') in your PR description.`);
+            return;
+          }
+
+          const issueNumber = parseInt(match[1]);
+          const { data: issue } = await github.rest.issues.get({owner: context.repo.owner, repo: context.repo.repo, issue_number: issueNumber});
+              
+          const isAssigned = issue.assignees.some(a => a.login === author);
+              
+          if (!isAssigned) {
+            await failPR(`Hello @${author}, Thank you for your contribution. As per the repository's guidelines, please ensure an issue is discussed and you are assigned to it before opening a pull request. Closing this PR for now.`);
+          } else {
+            console.log(`Assignment verified for @${author} on issue #${issueNumber}.`);
+          }
+
+          async function failPR(msg) {
+            console.log("Assignment check failed! PR closed.");
+              
+            await github.rest.issues.createComment({owner: context.repo.owner, repo: context.repo.repo, issue_number: pr.number, body: msg});
+
+            await github.rest.pulls.update({owner: context.repo.owner, repo: context.repo.repo, pull_number: pr.number, state: 'closed'});
+          }
+
   build:
+    needs: check-assignment
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
