@@ -1,4 +1,4 @@
-name: TermiFlow CI
+  name: TermiFlow CI
 
 on:
   push:
