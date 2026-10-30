@@ -68,7 +68,11 @@ void cmdHandler(ApplicationService& appService) {
                         std::cerr << e.what() <<"\n";
                     }
                 } else if (subcmd == "remove" && tokens.size() == 3) {
-                    s.remove(tokens[2]);    //remove 'c' from list of shortcuts mapped to 'chrome' 
+                    try {
+                        s.remove(tokens[2]);
+                    } catch (const std::exception& e) {
+                        std::cerr << e.what() << "\n";
+                    }
                 } else if (subcmd == "list") {
                     s.list();
                 }else {
