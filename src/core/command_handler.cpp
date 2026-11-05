@@ -33,12 +33,12 @@ void cmdHandler(ApplicationService& appService) {
 
         if (command == "launch") {
 
-            if (tokens.size() == 2 && s.exists(tokens[1])) { //checks for shortcut if used e.g., 'launch c'
-                std::string app = s.getValue(tokens[1]);
-                launchApp(app);
-            } else if (tokens.size() == 2) { //for no shortcuts, i.e., if default 'launch chrome'
+            if (tokens.size() == 2) {
+                //resolves a shortcut if used e.g., 'launch c', otherwise default 'launch chrome'
+                std::string app = s.exists(tokens[1]) ? s.getValue(tokens[1]) : tokens[1];
                 try{
-                    launchApp(tokens[1]);
+                    std::cout << "Launching " << app << "...\n";
+                    launchApp(app);
                 }
                 catch(const std::exception& e){
                     std::cerr << e.what() << "\n";

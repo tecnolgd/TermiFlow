@@ -6,6 +6,10 @@
 #include "../../include/launch.hpp"
 #include "../../include/shortcuts.hpp"
 
+#ifndef _WIN32
+#include <sys/wait.h>
+#endif
+
 //interactive mode launch app function
 void launchApp() {
     shortcuts s;
@@ -31,44 +35,78 @@ void launchApp() {
     }
 }
 
-void launchApp(std::string appName) {
-    std::string command;
-    
+#ifndef _WIN32
+// Builds a Linux command that fails with exit code 127 when the executable is
+// not installed, and otherwise starts the app in the background.
+static std::string backgroundCommand(const std::string& executable, const std::string& args = "") {
+    std::string run = args.empty() ? executable : executable + " " + args;
+    return "command -v " + executable + " >/dev/null 2>&1 || exit 127; " + run + " &";
+}
+#endif
+
+std::string buildLaunchCommand(const std::string& appName) {
 #ifdef _WIN32
     // Windows commands
     if (appName == "chrome") {
-        command = "start chrome";
+        return "start chrome";
     }
     else if (appName == "code") {
-        command = "code";
+        return "code";
     }
     else if (appName == "notepad") {
-        command = "notepad";
+        return "notepad";
     }
     else if(appName == "youtube"){
-        command = "start https://www.youtube.com";
+        return "start https://www.youtube.com";
     }
-    else {
-        throw std::runtime_error("Unknown app: " + appName);
-    }
-    system(command.c_str());
 #else
     // Linux commands
     if (appName == "chrome") {
-        command = "google-chrome &";
+        return backgroundCommand("google-chrome");
     }
     else if (appName == "code") {
-        command = "code &";
+        return backgroundCommand("code");
     }
     else if (appName == "notepad") {
-        command = "gedit &";
+        return backgroundCommand("gedit");
     }
     else if(appName == "youtube"){
-        command = "xdg-open https://www.youtube.com &";
+        return backgroundCommand("xdg-open", "https://www.youtube.com");
     }
-    else {
-        throw std::runtime_error("Unknown app: " + appName);
-    }
-    system(command.c_str());
 #endif
+    throw std::runtime_error("Unknown app: " + appName);
+}
+
+bool isLaunchSuccessful(int status) {
+    if (status == -1) { // the shell itself could not be started
+        return false;
+    }
+#ifdef _WIN32
+    return status == 0;
+#else
+    return WIFEXITED(status) && WEXITSTATUS(status) == 0;
+#endif
+}
+
+void launchApp(std::string appName) {
+    std::string command = buildLaunchCommand(appName);
+    int status = system(command.c_str());
+
+    if (isLaunchSuccessful(status)) {
+        return;
+    }
+    if (status == -1) {
+        throw std::runtime_error("Failed to launch " + appName + ": could not start the system shell.");
+    }
+
+    int exitCode = status;
+#ifndef _WIN32
+    if (WIFEXITED(status)) {
+        exitCode = WEXITSTATUS(status);
+        if (exitCode == 127) {
+            throw std::runtime_error("Failed to launch " + appName + ": application not found. Is it installed?");
+        }
+    }
+#endif
+    throw std::runtime_error("Failed to launch " + appName + " (exit code " + std::to_string(exitCode) + ").");
 }
