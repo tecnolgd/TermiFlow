@@ -46,9 +46,8 @@ Enter your choice:
 ## Why TermiFlow?
 
 Modern systems are powerful but fragmented.  
-TermiFlow exists to answer one question:
-
-> *“Why should I leave the terminal to do simple things?”*
+TermiFlow exists to answer one question:      
+*“Why should I leave the terminal to do simple things?”*
 
 It’s designed for:
 - developers
@@ -145,7 +144,10 @@ After building, run the application:
   	```bash
   	shortcuts add  chrome c
   	```
-	- (Note: Shortcuts are currently defined for Windows systems; Linux support comming soon!)
+
+> [!NOTE]      
+> Shortcuts are currently defined for Windows systems; Linux support comming soon!
+
 
 - **Terminal theme management**
 	- Provides *light* and *dark* theme for terminals
@@ -216,15 +218,6 @@ TermiFlow follows **clean architecture** principles with clear separation betwee
 > - **Code comments** in source files for implementation details
 > - **Header files** in `include/` directory for function details
 
-## Future Upgrades
-
-- **Cross-platform** support (Linux, macOS)
-- Plugin system for third-party modules
-- Enhanced system stats (CPU, network, etc.)    
-- **Scripting** and **automation** features 
-- **Config Management** for tool customisation   
-- **More** themes and customization options
-
 ## Contributors
 A huge thanks to the developers contributing to TermiFlow.
 
@@ -244,7 +237,7 @@ If TermiFlow has positively impacted your workflow, consider:
 - Starring this repository
 - Forking the project
 - Sharing feedback and suggestions
-- [Contributing](CONTRIBUTING.md) code or documentation
+- [Contributing](CONTRIBUTING.md) to the codebase
 
 ## License
 MIT
