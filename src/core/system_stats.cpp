@@ -89,10 +89,11 @@ std::string SystemStats::getMemoryUsage() {
 
 std::string SystemStats::getUptime() {
 #ifdef _WIN32
-    DWORD uptimeMs = GetTickCount();
-    int seconds = uptimeMs / 1000.0;
-    int minutes = seconds / 60.0;
-    int hours = minutes / 60.0;
+    ULONGLONG uptimeMs = GetTickCount64();
+
+    ULONGLONG seconds = uptimeMs / 1000;
+    ULONGLONG hours = seconds / 3600;
+    ULONGLONG minutes = (seconds % 3600) / 60;
 
     std::ostringstream outputString;
     outputString << "Uptime: " << hours << "h " << minutes << "m";
