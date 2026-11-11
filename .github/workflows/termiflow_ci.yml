@@ -3,8 +3,6 @@ name: TermiFlow CI
 on:
   push:
     branches: ["main"]
-  pull_request:
-    types: ["opened", "synchronize", "reopened"]
   pull_request_target:
     types: ["opened", "synchronize", "reopened"]
 
@@ -69,7 +67,6 @@ jobs:
 
   build:
     needs: check-assignment
-    if: ${{ always() && github.event_name != 'pull_request_target' && (needs.check-assignment.result == 'success' || needs.check-assignment.result == 'skipped') }}
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     permissions:
