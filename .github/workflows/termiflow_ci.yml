@@ -67,6 +67,7 @@ jobs:
 
   build:
     needs: check-assignment
+    if: ${{ !failure() && !cancelled() }}
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     permissions:
