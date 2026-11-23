@@ -8,6 +8,8 @@
   </a>
   <a href="https://github.com/tecnolgd/TermiFlow/graphs/contributors"><img src="https://img.shields.io/github/contributors/tecnolgd/TermiFlow?color=1a1a1a&style=flat-square" alt="Contributors Badge">
   </a>
+  <a href = "https://github.com/tecnolgd/libcvault/actions/workflows/libcvault_ci.yml"><img src = "https://img.shields.io/github/actions/workflow/status/tecnolgd/TermiFlow/termiflow_ci.yml?branch=main&label=build&labelColor=1a1a1a&color=4a6349&style=flat-square" alt="Build">
+  </a>
 
 </div>
 
