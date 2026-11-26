@@ -25,6 +25,86 @@
 - **Testability** – business logic decoupled from UI and I/O operations
 
 
+## System Architecture
+
+How the parts of the app connect, and which files each part reads or writes. Paths are relative to the directory TermiFlow is run from.
+
+```mermaid
+flowchart TD
+    main["main.cpp<br/>main()"] --> app["ApplicationService"]
+
+    subgraph services["Core services"]
+        ui["UIService<br/>menus, prompts, messages"]
+        cfg["ConfigService<br/>get/set config values"]
+        theme["Theme manager<br/>changeTheme()"]
+    end
+
+    subgraph features["Feature modules"]
+        launch["Launch<br/>launchApp()"]
+        sc["Shortcuts<br/>class shortcuts"]
+        hist["History<br/>class history"]
+        stats["SystemStats<br/>CPU, memory, uptime"]
+    end
+
+    cmd["Command handler<br/>cmdHandler()"]
+
+    app --> ui
+    app --> cfg
+    app --> theme
+    app -->|"menu 1"| launch
+    app -->|"menu 2"| sc
+    app -->|"menu 6"| hist
+    app -->|"menu 7"| stats
+    app -->|"menu 9"| cmd
+
+    cmd --> launch
+    cmd --> sc
+    cmd --> hist
+    cmd --> stats
+    cmd -->|"theme command:<br/>applyAndSaveTheme()"| app
+    launch -->|"resolves shortcuts"| sc
+
+    cfg <-->|"reads / writes"| conf[("config/termiflow.conf")]
+    sc <-->|"reads / writes"| scfile[("assets/textfiles/shortcut_det.txt")]
+    hist <-->|"reads / writes"| hfile[("assets/textfiles/history.txt")]
+```
+
+- `ApplicationService` owns a `ConfigService` and a `UIService`. The feature modules are free functions or classes it calls directly.
+- `shortcuts` and `history` load their file when the object is created, so each menu option and the command handler work on a fresh copy read from disk.
+- The command handler changes the theme through `ApplicationService::applyAndSaveTheme()`, so the new theme is saved to the config file the same way as menu option 4.
+
+## Code Entry Points
+
+The Makefile builds three programs. Each has its own `main()` and compiles a different set of sources.
+
+```mermaid
+flowchart LR
+    mk["Makefile"]
+
+    mk -->|"make, make run,<br/>make windows"| appbin["build/termiflow<br/>(termiflow.exe on Windows)"]
+    mk -->|"make test"| testbin["build/test_runner"]
+    mk -->|"make benchmark"| benchbin["build/benchmark_runner<br/>(built with -O3)"]
+
+    appbin --- appmain["src/main.cpp<br/>main()"]
+    testbin --- testmain["tests/main_test.cpp<br/>TestFramework::runAllTests()"]
+    benchbin --- benchmain["benchmarks/benchmark.cpp<br/>main()"]
+
+    appmain --> lib["src/core/*.cpp<br/>src/features/*.cpp"]
+    testmain --> tests["tests/*_test.cpp"]
+    tests --> lib
+    benchmain --> benchlib["src/core/command_parser.cpp<br/>src/core/config_service.cpp"]
+```
+
+| Program | Entry point | Also compiles |
+|---|---|---|
+| `build/termiflow` | `src/main.cpp` | every file in `src/core/` and `src/features/` |
+| `build/test_runner` | `tests/main_test.cpp` | every `tests/*_test.cpp`, plus all of `src/core/` and `src/features/` (not `src/main.cpp`) |
+| `build/benchmark_runner` | `benchmarks/benchmark.cpp` | only `command_parser.cpp` and `config_service.cpp` |
+
+> [!NOTE]
+> `tokenizeCommand()` in `command_parser.cpp` is used by the tests and the benchmark. The command handler in the app splits input with its own `std::stringstream` loop and does not call it.
+
+
 ## Component Architecture
 
 ### Architecture Layers
@@ -364,6 +444,74 @@ TermiFlow follows a **three-layer service-oriented architecture**:
 > The command handler provides a powerful alternative interface for power users and scripting. It complements the menu-driven interface and enables keyboard-driven workflows without navigating menus.
 
 ## Data Flow Diagrams
+
+### Main Menu Dispatch
+
+What happens from startup to exit, following `main()`, `ApplicationService::initialize()` and the `switch` in `ApplicationService::run()`.
+
+```mermaid
+flowchart TD
+    start(["main()"]) --> init["app.initialize()"]
+    init --> auto{"behavior.auto_apply_theme<br/>is true?<br/>(true if not set)"}
+    auto -->|yes| apply["changeTheme() with<br/>user_interface.theme<br/>(dark if not set)"]
+    auto -->|no| menu
+    apply --> menu
+
+    menu["UIService::displayMainMenu()<br/>UIService::getMenuChoice()"] --> choice{"choice"}
+
+    choice -->|"1"| o1["launchApp()<br/>ask for an app or shortcut, then launch it"]
+    choice -->|"2"| o2["shortcutInteractive()"]
+    choice -->|"4"| o4["handleThemeChange()<br/>ask for a theme, apply it, save it to config"]
+    choice -->|"6"| o6["historyInteractive()"]
+    choice -->|"7"| o7["SystemStats<br/>CPU, memory, uptime"]
+    choice -->|"9"| o9["cmdHandler()<br/>see Command Handler Routing"]
+    choice -->|"3, 5, 8"| na["Not available for the current version"]
+    choice -->|"anything else"| bad["Invalid option! Try again."]
+    choice -->|"0"| stop(["Exit"])
+
+    o1 --> menu
+    o2 --> menu
+    o4 --> menu
+    o6 --> menu
+    o7 --> menu
+    o9 --> menu
+    na --> menu
+    bad --> menu
+```
+
+If an exception escapes a menu option, `run()` shows it with `UIService::displayError()` and the app exits.
+
+### Command Handler Routing
+
+How `cmdHandler()` in `src/core/command_handler.cpp` handles each line typed at the `>>>` prompt.
+
+```mermaid
+flowchart TD
+    read["Show the prompt<br/>read a line with std::getline"] --> save["h.add(input)<br/>every line goes into history, even empty ones"]
+    save --> split["Split on whitespace<br/>with std::stringstream"]
+    split --> empty{"any words?"}
+    empty -->|no| read
+    empty -->|yes| cmd{"first word"}
+
+    cmd -->|"launch"| launch["launch app or shortcut<br/>a known shortcut is replaced by its app,<br/>then launchApp(app)"]
+    cmd -->|"theme"| theme["theme light or dark<br/>appService.applyAndSaveTheme()"]
+    cmd -->|"shortcut"| sc["shortcut add app key<br/>shortcut remove key<br/>shortcut list"]
+    cmd -->|"history"| hist["history list<br/>history clear<br/>history goto index"]
+    cmd -->|"stats"| stats["statsInteractive()"]
+    cmd -->|"help"| help["Print the command list"]
+    cmd -->|"exit, quit"| done(["Back to the main menu"])
+    cmd -->|"anything else"| unknown["Unknown command. Type 'help'."]
+
+    launch --> read
+    theme --> read
+    sc --> read
+    hist --> read
+    stats --> read
+    help --> read
+    unknown --> read
+```
+
+A command with the wrong arguments prints a usage or error message and goes back to the prompt.
 
 ### Application Initialization Flow
 

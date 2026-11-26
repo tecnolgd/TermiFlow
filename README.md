@@ -165,6 +165,21 @@ After building, run the application:
 
 ## Architecture & Design
 
+### Overview
+
+```mermaid
+flowchart LR
+    main["main.cpp"] --> app["ApplicationService"]
+    app --> ui["UIService"]
+    app --> cfg["ConfigService"]
+    app --> feat["Feature modules<br/>launch, shortcuts, history,<br/>system stats, theme"]
+    app --> cmd["Command handler"]
+    cmd --> feat
+    cfg --> conf[("config/termiflow.conf")]
+```
+
+For the full system diagram, the three build entry points and the menu and command flows, see [Architecture](assets/docs/architecture.md#system-architecture).
+
 ### Separation of Concerns
 
 TermiFlow follows **clean architecture** principles with clear separation between:
